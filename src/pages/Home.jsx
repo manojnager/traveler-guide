@@ -16,8 +16,7 @@ function Home() {
       <FeaturedPackages />
       <WhyChooseUs />
       <Testimonials />
-      <Newsletter /> 
-      <Footer />
+      <Newsletter />
     </main>
   );
 }

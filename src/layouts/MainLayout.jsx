@@ -1,9 +1,14 @@
+import { Outlet } from "react-router-dom";
+
 import Header from "../components/Header/Header";
-function MainLayout({ children }) {
+import Footer from "../components/Footer/Footer";
+
+function MainLayout() {
   return (
     <>
       <Header />
-      {children}
+      <Outlet />
+      <Footer />
     </>
   );
 }
