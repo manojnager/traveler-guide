@@ -137,7 +137,61 @@
   background: var(--primary);
   color: #111;
 }
+.menu-toggle {
+  display: none;
+  background: transparent;
+  border: none;
+  color: #fff;
+  font-size: 34px;
+  cursor: pointer;
+}
 
+.navigation a.active {
+  color: var(--primary);
+}
+
+.navigation a.active::after {
+  width: 100%;
+}
+
+@media (max-width: 992px) {
+  .menu-toggle {
+    display: block;
+    z-index: 1002;
+  }
+
+  .book-btn {
+    display: none;
+  }
+
+  .navigation {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 320px;
+    height: 100vh;
+    background: #08111f;
+    transition: .35s ease;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+    box-shadow: -10px 0 30px rgba(0,0,0,.3);
+  }
+
+  .navigation.open {
+    right: 0;
+  }
+
+  .navigation ul {
+    flex-direction: column;
+    gap: 32px;
+  }
+
+  .navigation a {
+    font-size: 16px;
+  }
+}
 /* ==========================================
    RESPONSIVE
 ========================================== */

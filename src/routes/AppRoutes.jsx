@@ -1,5 +1,7 @@
 import { Routes, Route } from "react-router-dom";
 
+import ROUTES from "../constants/routes";
+
 import MainLayout from "../layouts/MainLayout";
 
 import Home from "../pages/Home";
@@ -17,36 +19,32 @@ import NotFound from "../pages/NotFound";
 function AppRoutes() {
   return (
     <Routes>
-
       <Route element={<MainLayout />}>
+        <Route path={ROUTES.HOME} element={<Home />} />
 
-        <Route path="/" element={<Home />} />
+        <Route path={ROUTES.ABOUT} element={<About />} />
 
-        <Route path="/about" element={<About />} />
+        <Route path={ROUTES.CONTACT} element={<Contact />} />
 
-        <Route path="/contact" element={<Contact />} />
-
-        <Route path="/destinations" element={<Destinations />} />
+        <Route path={ROUTES.DESTINATIONS} element={<Destinations />} />
 
         <Route
-          path="/destinations/:slug"
+          path={ROUTES.DESTINATION_DETAILS}
           element={<DestinationDetails />}
         />
 
-        <Route path="/packages" element={<Packages />} />
+        <Route path={ROUTES.PACKAGES} element={<Packages />} />
 
-        <Route path="/booking" element={<Booking />} />
+        <Route path={ROUTES.BOOKING} element={<Booking />} />
 
-        <Route path="/checkout" element={<Checkout />} />
-
+        <Route path={ROUTES.CHECKOUT} element={<Checkout />} />
       </Route>
 
-      <Route path="/login" element={<Login />} />
+      <Route path={ROUTES.LOGIN} element={<Login />} />
 
-      <Route path="/register" element={<Register />} />
+      <Route path={ROUTES.REGISTER} element={<Register />} />
 
       <Route path="*" element={<NotFound />} />
-
     </Routes>
   );
 }
