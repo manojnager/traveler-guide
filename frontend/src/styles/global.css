@@ -1,0 +1,168 @@
+:root{
+
+--background:#08111F;
+
+--surface:#111B2B;
+
+--card:#162235;
+
+--primary:#C8A96A;
+
+--primary-hover:#B89452;
+
+--text:#FFFFFF;
+
+--text-light:#B6C2D2;
+
+--border:rgba(255,255,255,.08);
+
+--container:1320px;
+
+--radius:18px;
+
+--transition:.35s ease;
+
+--shadow:0 20px 60px rgba(0,0,0,.45);
+
+}
+*{
+
+margin:0;
+
+padding:0;
+
+box-sizing:border-box;
+
+}
+:host, :root {
+    margin-left: 0;
+    margin-right: 0;
+}
+
+html{
+
+scroll-behavior:smooth;
+
+}
+body {
+  background: var(--background);
+  color: var(--text);
+  font-family: "Inter", sans-serif;
+  overflow-x: hidden;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: "Cormorant Garamond", serif;
+  font-weight: 500;
+  letter-spacing: .5px;
+}
+.container{
+
+width:min(var(--container),calc(100% - 60px));
+
+margin:0 auto;
+
+}
+.section{
+padding:140px 0;
+}
+
+.section-title{
+text-align:center;
+margin-bottom:70px;
+}
+
+.section-title span{
+display:block;
+color:#c8a96a;
+letter-spacing:3px;
+text-transform:uppercase;
+font-size:12px;
+margin-bottom:16px;
+}
+
+.section-title h2{
+font-size:58px;
+margin-bottom:18px;
+font-family:var(--font-heading);
+}
+
+.section-title p{
+max-width:650px;
+margin:auto;
+color:#b8c1d0;
+line-height:1.8;
+}
+
+.destination-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+gap:35px;
+}
+.results-header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:50px;
+}
+
+.results-header h2{
+font-size:42px;
+font-family:var(--font-heading);
+}
+
+.results-header select{
+width:240px;
+height:56px;
+padding:0 20px;
+background:#182335;
+border:1px solid rgba(255,255,255,.08);
+border-radius:12px;
+color:#fff;
+}
+
+@media(max-width:768px){
+.results-header{
+flex-direction:column;
+align-items:flex-start;
+gap:20px;
+}
+
+.results-header select{
+width:100%;
+}
+}
+
+.details-layout{
+display:grid;
+grid-template-columns:2fr 420px;
+gap:70px;
+align-items:start;
+}
+
+.details-content h1 {
+    font-size: 44px;
+    margin: 0px 0 30px 0;
+    font-family: var(--font-heading);
+    line-height: 52px;
+}
+
+.details-description{
+font-size:18px;
+line-height:1.9;
+margin-bottom:50px;
+color:#c5ced8;
+}
+
+@media(max-width:992px){
+.details-layout{
+grid-template-columns:1fr;
+}
+}

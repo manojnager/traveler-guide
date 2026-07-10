@@ -1,0 +1,51 @@
+.booking-cta{
+padding:0 0 120px;
+}
+
+.booking-cta-box{
+padding:80px;
+text-align:center;
+border-radius:24px;
+background:linear-gradient(135deg,#182335,#0d1726);
+border:1px solid rgba(255,255,255,.08);
+}
+
+.booking-cta-box span{
+display:block;
+margin-bottom:18px;
+font-size:12px;
+letter-spacing:3px;
+text-transform:uppercase;
+color:#c8a96a;
+}
+
+.booking-cta-box h2{
+font-size:56px;
+margin-bottom:20px;
+font-family:var(--font-heading);
+}
+
+.booking-cta-box p{
+max-width:650px;
+margin:0 auto 40px;
+line-height:1.8;
+color:#c5ced8;
+}
+
+.booking-cta-btn{
+display:inline-flex;
+align-items:center;
+justify-content:center;
+padding:18px 42px;
+background:#c8a96a;
+color:#111;
+border-radius:12px;
+text-decoration:none;
+font-weight:700;
+transition:.3s;
+}
+
+.booking-cta-btn:hover{
+transform:translateY(-3px);
+background:#d7b572;
+}

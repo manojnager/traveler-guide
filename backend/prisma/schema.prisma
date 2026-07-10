@@ -1,0 +1,236 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserStatus {
+  ACTIVE
+  INACTIVE
+}
+
+model Role {
+  id        Int      @id @default(autoincrement())
+  name      String   @unique @db.VarChar(50)
+  users     User[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model User {
+  id         Int        @id @default(autoincrement())
+  roleId     Int
+  firstName  String     @db.VarChar(100)
+  lastName   String     @db.VarChar(100)
+  email      String     @unique @db.VarChar(150)
+  password   String
+  phone      String?    @db.VarChar(20)
+  avatar     String?
+  status     UserStatus @default(ACTIVE)
+  role       Role       @relation(fields: [roleId], references: [id])
+  reviews    Review[]
+  wishlists  Wishlist[]
+  bookings   Booking[]
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+
+  @@index([roleId])
+}
+
+model Country {
+  id           Int           @id @default(autoincrement())
+  name         String        @unique @db.VarChar(100)
+  code         String        @unique @db.VarChar(5)
+  cities       City[]
+  destinations Destination[]
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+}
+
+model City {
+  id           Int           @id @default(autoincrement())
+  countryId    Int
+  name         String        @db.VarChar(100)
+  country      Country       @relation(fields: [countryId], references: [id])
+  destinations Destination[]
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+
+  @@index([countryId])
+  @@unique([countryId, name])
+}
+
+model Category {
+  id           Int           @id @default(autoincrement())
+  name         String        @unique @db.VarChar(100)
+  slug         String        @unique @db.VarChar(150)
+  destinations Destination[]
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+}
+
+model Destination {
+  id                 Int                  @id @default(autoincrement())
+  categoryId         Int
+  countryId          Int
+  cityId             Int
+  title              String               @db.VarChar(200)
+  slug               String               @unique @db.VarChar(200)
+  shortDescription   String               @db.VarChar(500)
+  description        String               @db.LongText
+  thumbnail          String? @db.VarChar(255)
+  heroImage          String? @db.VarChar(255)
+  price              Decimal              @db.Decimal(10,2)
+  duration           String               @db.VarChar(50)
+  rating             Decimal              @default(5.0) @db.Decimal(2,1)
+  featured           Boolean              @default(false)
+  maxGuests          Int                  @default(2)
+  cancellationPolicy String?              @db.LongText
+  checkIn            String?              @db.VarChar(20)
+  checkOut           String?              @db.VarChar(20)
+  metaTitle          String?              @db.VarChar(255)
+  metaDescription    String?              @db.VarChar(500)
+  displayOrder       Int                  @default(0)
+  isPublished        Boolean              @default(true)
+
+  category           Category             @relation(fields: [categoryId], references: [id])
+  country            Country              @relation(fields: [countryId], references: [id])
+  city               City                 @relation(fields: [cityId], references: [id])
+
+  images             DestinationImage[]
+  itineraries        Itinerary[]
+  amenities          DestinationAmenity[]
+  reviews            Review[]
+  wishlists          Wishlist[]
+  bookings           Booking[]
+  highlights         DestinationHighlight[]
+
+  createdAt          DateTime             @default(now())
+  updatedAt          DateTime             @updatedAt
+
+  @@index([categoryId])
+  @@index([countryId])
+  @@index([cityId])
+  @@index([featured])
+  @@index([isPublished])
+  @@index([displayOrder])
+}
+
+model DestinationImage {
+  id            Int         @id @default(autoincrement())
+  destinationId Int
+  image         String
+  sortOrder     Int         @default(0)
+  destination   Destination @relation(fields: [destinationId], references: [id])
+
+  @@index([destinationId])
+}
+
+model Amenity {
+  id           Int                    @id @default(autoincrement())
+  name         String                 @unique
+  destinations DestinationAmenity[]
+}
+
+model DestinationAmenity {
+  destinationId Int
+  amenityId     Int
+  destination   Destination @relation(fields: [destinationId], references: [id])
+  amenity       Amenity     @relation(fields: [amenityId], references: [id])
+
+  @@id([destinationId, amenityId])
+}
+
+model Itinerary {
+  id            Int         @id @default(autoincrement())
+  destinationId Int
+  day           Int
+  title         String
+  description   String      @db.LongText
+  destination   Destination @relation(fields: [destinationId], references: [id])
+
+  @@index([destinationId])
+}
+model DestinationHighlight {
+  id            Int         @id @default(autoincrement())
+  destinationId Int
+  title         String      @db.VarChar(255)
+
+  destination   Destination @relation(fields: [destinationId], references: [id], onDelete: Cascade)
+
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+
+  @@index([destinationId])
+}
+
+model Review {
+  id            Int         @id @default(autoincrement())
+  destinationId Int
+  userId        Int
+  rating        Decimal     @db.Decimal(2,1)
+  review        String      @db.LongText
+  destination   Destination @relation(fields: [destinationId], references: [id])
+  user          User        @relation(fields: [userId], references: [id])
+
+  @@index([destinationId])
+  @@index([userId])
+}
+
+model Wishlist {
+  userId        Int
+  destinationId Int
+  user          User        @relation(fields: [userId], references: [id])
+  destination   Destination @relation(fields: [destinationId], references: [id])
+
+  @@id([userId, destinationId])
+}
+
+enum BookingStatus {
+  PENDING
+  CONFIRMED
+  CANCELLED
+}
+
+model Booking {
+  id            Int           @id @default(autoincrement())
+  userId        Int
+  destinationId Int
+  travelDate    DateTime
+  guests        Int
+  totalAmount   Decimal       @db.Decimal(10,2)
+  status        BookingStatus @default(PENDING)
+  user          User          @relation(fields: [userId], references: [id])
+  destination   Destination   @relation(fields: [destinationId], references: [id])
+  payment       Payment?
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  @@index([userId])
+  @@index([destinationId])
+}
+
+enum PaymentStatus {
+  PENDING
+  PAID
+  FAILED
+  REFUNDED
+}
+
+model Payment {
+  id        Int           @id @default(autoincrement())
+  bookingId Int           @unique
+  amount    Decimal       @db.Decimal(10,2)
+  method    String
+  status    PaymentStatus @default(PENDING)
+  booking   Booking       @relation(fields: [bookingId], references: [id])
+  createdAt DateTime      @default(now())
+}

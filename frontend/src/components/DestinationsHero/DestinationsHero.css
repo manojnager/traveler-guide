@@ -1,0 +1,55 @@
+.destinations-hero{
+position:relative;
+min-height:680px;
+padding:180px 0 70px;
+display:flex;
+background-size:cover;
+background-position:center;
+}
+
+.destinations-hero .hero-overlay{
+position:absolute;
+inset:0;
+background:linear-gradient(90deg,rgba(6,13,25,.88),rgba(6,13,25,.45));
+}
+
+.destinations-hero-content{
+position:relative;
+z-index:2;
+max-width:700px;
+}
+
+.destinations-hero-content span{
+display:inline-block;
+margin-bottom:20px;
+color:#c8a96a;
+letter-spacing:4px;
+text-transform:uppercase;
+font-size:12px;
+}
+
+.destinations-hero-content h1{
+font-size:72px;
+line-height:1.1;
+margin-bottom:25px;
+font-family:var(--font-heading);
+}
+
+.destinations-hero-content p{
+max-width:620px;
+font-size:20px;
+line-height:1.8;
+color:#c7ced8;
+}
+
+@media(max-width:768px){
+.destinations-hero{
+height:420px;
+}
+.destinations-hero-content h1{
+font-size:46px;
+}
+.destinations-hero-content p{
+font-size:17px;
+}
+}
