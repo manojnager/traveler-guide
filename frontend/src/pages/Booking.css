@@ -1,0 +1,151 @@
+.booking-page {
+  padding: 140px 0 80px;
+  min-height: 70vh;
+}
+
+.booking-page h1 {
+  font-size: 2.2rem;
+  margin-bottom: 8px;
+}
+
+.booking-subtitle {
+  color: #6c7a91;
+  margin-bottom: 40px;
+}
+
+.booking-empty {
+  text-align: center;
+  padding: 80px 0;
+}
+
+.booking-empty h1 {
+  margin-bottom: 12px;
+}
+
+.booking-empty p {
+  color: #6c7a91;
+  margin-bottom: 24px;
+}
+
+.booking-layout {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr;
+  gap: 32px;
+  align-items: start;
+}
+
+@media (max-width: 900px) {
+  .booking-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+.booking-summary-card,
+.booking-form-card {
+  background: #fff;
+  border: 1px solid #e6e7e9;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.booking-summary-card img {
+  width: 100%;
+  height: 260px;
+  object-fit: cover;
+  display: block;
+}
+
+.booking-summary-content {
+  padding: 24px;
+}
+
+.booking-summary-category {
+  display: inline-block;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #206bc4;
+  margin-bottom: 8px;
+}
+
+.booking-summary-content h2 {
+  margin: 0 0 6px;
+  font-size: 1.5rem;
+}
+
+.booking-summary-location {
+  color: #6c7a91;
+  margin-bottom: 16px;
+}
+
+.booking-summary-desc {
+  color: #4b5563;
+  line-height: 1.6;
+}
+
+.booking-form-card {
+  padding: 28px;
+}
+
+.booking-form-card h3 {
+  margin: 0 0 20px;
+  font-size: 1.2rem;
+}
+
+.booking-field {
+  margin-bottom: 18px;
+}
+
+.booking-field label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.booking-field input,
+.booking-field select {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid #d7dade;
+  border-radius: 6px;
+  font-size: 0.95rem;
+}
+
+.booking-price-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 0;
+  border-bottom: 1px solid #eef0f2;
+  color: #4b5563;
+}
+
+.booking-total-row {
+  border-bottom: none;
+  font-size: 1.1rem;
+  color: #111;
+  padding-top: 16px;
+}
+
+.booking-btn {
+  display: block;
+  width: 100%;
+  text-align: center;
+  margin-top: 24px;
+  padding: 14px;
+  background: #206bc4;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: 0.25s;
+}
+
+.booking-btn:hover {
+  background: #1a5aa3;
+  color: #fff;
+}

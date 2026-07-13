@@ -1,3 +1,5 @@
+import bcrypt from "bcrypt";
+import crypto from "crypto";
 import prisma from "../../lib/prisma.js";
 import AppError from "../../errors/AppError.js";
 
@@ -104,4 +106,81 @@ export const updateBookingStatus = async (id, status) => {
 export const deleteBooking = async (id) => {
   await getBookingById(id);
   return prisma.booking.delete({ where: { id: Number(id) } });
+};
+
+export const createPublicBooking = async (data) => {
+  const destination = await prisma.destination.findUnique({
+    where: { id: data.destinationId }
+  });
+
+  if (!destination || !destination.isPublished) {
+    throw new AppError("Destination not found or unavailable.", 404);
+  }
+
+  let user = await prisma.user.findUnique({
+    where: { email: data.email }
+  });
+
+  let isNewAccount = false;
+
+  if (!user) {
+    const customerRole = await prisma.role.findFirst({
+      where: { name: "Customer" }
+    });
+
+    const randomPassword = crypto.randomBytes(16).toString("hex");
+    const hashedPassword = await bcrypt.hash(randomPassword, 10);
+
+    user = await prisma.user.create({
+      data: {
+        roleId: customerRole.id,
+        firstName: data.firstName,
+        lastName: data.lastName,
+        email: data.email,
+        password: hashedPassword,
+        phone: data.phone || null
+      }
+    });
+
+    isNewAccount = true;
+  }
+
+  const totalAmount = Number(destination.price) * data.guests;
+
+  const booking = await prisma.$transaction(async (tx) => {
+    const createdBooking = await tx.booking.create({
+      data: {
+        userId: user.id,
+        destinationId: destination.id,
+        travelDate: new Date(data.travelDate),
+        guests: data.guests,
+        totalAmount,
+        status: "PENDING"
+      }
+    });
+
+    await tx.payment.create({
+      data: {
+        bookingId: createdBooking.id,
+        amount: totalAmount,
+        method: data.paymentMethod,
+        status: "PENDING"
+      }
+    });
+
+    return tx.booking.findUnique({
+      where: { id: createdBooking.id },
+      include: {
+        user: {
+          select: { id: true, firstName: true, lastName: true, email: true, phone: true }
+        },
+        destination: {
+          select: { id: true, title: true, slug: true, thumbnail: true, price: true, duration: true }
+        },
+        payment: true
+      }
+    });
+  });
+
+  return { booking, isNewAccount };
 };

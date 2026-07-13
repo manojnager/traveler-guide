@@ -3,9 +3,13 @@ import {
   getAdminBookings,
   getBookingById,
   updateBookingStatus,
-  deleteBooking
+  deleteBooking,
+  createPublicBooking
 } from "./booking.service.js";
-import { updateBookingStatusSchema } from "./booking.validation.js";
+import {
+  updateBookingStatusSchema,
+  createPublicBookingSchema
+} from "./booking.validation.js";
 
 export const adminIndex = async (req, res, next) => {
   try {
@@ -39,6 +43,16 @@ export const destroy = async (req, res, next) => {
   try {
     await deleteBooking(req.params.id);
     return successResponse(res, "Booking deleted successfully.", null);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const store = async (req, res, next) => {
+  try {
+    const data = createPublicBookingSchema.parse(req.body);
+    const result = await createPublicBooking(data);
+    return successResponse(res, "Booking created successfully.", result, 201);
   } catch (error) {
     next(error);
   }

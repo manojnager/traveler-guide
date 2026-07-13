@@ -1,16 +1,46 @@
+import { useEffect, useState } from "react";
+
 import DestinationCard from "../DestinationCard/DestinationCard";
-import destinations from "../../data/destinations";
+import { getPublicDestinations } from "../../services/destinationService";
+import { mapDestination } from "../../utils/destinationMapper";
+
 import "./RelatedDestinations.css";
 
 function RelatedDestinations({ destination }) {
-  const related = destinations
-    .filter(
-      (item) =>
-        item.id !== destination.id &&
-        (item.category === destination.category ||
-          item.featured)
-    )
-    .slice(0, 3);
+  const [related, setRelated] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const loadRelated = async () => {
+      setLoading(true);
+
+      try {
+        const data = await getPublicDestinations();
+        const mapped = data.map(mapDestination);
+
+        const filtered = mapped
+          .filter(
+            (item) =>
+              item.id !== destination.id &&
+              (item.category === destination.category ||
+                item.featured)
+          )
+          .slice(0, 3);
+
+        setRelated(filtered);
+      } catch {
+        setRelated([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadRelated();
+  }, [destination.id, destination.category]);
+
+  if (!loading && related.length === 0) {
+    return null;
+  }
 
   return (
     <section className="related-destinations">
@@ -29,12 +59,22 @@ function RelatedDestinations({ destination }) {
         </div>
 
         <div className="destination-grid">
-          {related.map((item) => (
-            <DestinationCard
-              key={item.id}
-              destination={item}
-            />
-          ))}
+          {loading &&
+            Array.from({ length: 3 }).map((_, index) => (
+              <div
+                key={index}
+                className="destination-card"
+                style={{ background: "#f4f6f8", minHeight: "300px" }}
+              />
+            ))}
+
+          {!loading &&
+            related.map((item) => (
+              <DestinationCard
+                key={item.id}
+                destination={item}
+              />
+            ))}
         </div>
 
       </div>
