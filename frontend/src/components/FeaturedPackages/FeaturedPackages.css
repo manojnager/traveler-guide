@@ -79,7 +79,12 @@
   margin-bottom: 28px;
 }
 
-.package-content button {
+.package-content button,
+.package-content a.package-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
   width: 100%;
   height: 56px;
   border: 1px solid var(--primary);
@@ -91,7 +96,8 @@
   transition: .35s;
 }
 
-.package-content button:hover {
+.package-content button:hover,
+.package-content a.package-btn:hover {
   background: var(--primary);
   color: #111;
 }
@@ -118,4 +124,16 @@
   .package-content h3 {
     font-size: 32px;
   }
+}
+.package-content button,
+.package-content a.package-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+}
+
+.package-content button:hover,
+.package-content a.package-btn:hover {
+  opacity: 0.9;
 }

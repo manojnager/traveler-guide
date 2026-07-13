@@ -178,6 +178,8 @@ model Review {
   userId        Int
   rating        Decimal     @db.Decimal(2,1)
   review        String      @db.LongText
+  isHidden      Boolean     @default(false)
+  createdAt     DateTime    @default(now())
   destination   Destination @relation(fields: [destinationId], references: [id])
   user          User        @relation(fields: [userId], references: [id])
 
@@ -188,10 +190,20 @@ model Review {
 model Wishlist {
   userId        Int
   destinationId Int
+  createdAt     DateTime    @default(now())
   user          User        @relation(fields: [userId], references: [id])
   destination   Destination @relation(fields: [destinationId], references: [id])
 
   @@id([userId, destinationId])
+}
+
+model Setting {
+  id    Int     @id @default(autoincrement())
+  key   String  @unique
+  value String? @db.LongText
+  group String  @default("general")
+
+  @@index([group])
 }
 
 enum BookingStatus {

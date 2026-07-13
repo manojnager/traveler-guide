@@ -36,7 +36,7 @@ export default function Login() {
   };
 
   return (
-    <div className="page page-center">
+    <div className="page page-center admin-shell">
       <div className="container container-tight py-4">
         <div className="text-center mb-4">
           <h1 className="navbar-brand navbar-brand-autodark">Traveler Guide</h1>
