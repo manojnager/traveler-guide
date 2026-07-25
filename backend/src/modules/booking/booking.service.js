@@ -31,7 +31,9 @@ export const getAdminBookings = async (query) => {
       { user: { firstName: { contains: query.search } } },
       { user: { lastName: { contains: query.search } } },
       { user: { email: { contains: query.search } } },
-      { destination: { title: { contains: query.search } } }
+      { destination: { title: { contains: query.search } } },
+      { contactFirstName: { contains: query.search } },
+      { contactLastName: { contains: query.search } }
     ];
   }
 
@@ -155,7 +157,10 @@ export const createPublicBooking = async (data) => {
         travelDate: new Date(data.travelDate),
         guests: data.guests,
         totalAmount,
-        status: "PENDING"
+        status: "PENDING",
+        contactFirstName: data.firstName,
+        contactLastName: data.lastName,
+        contactPhone: data.phone || null
       }
     });
 
