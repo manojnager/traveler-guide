@@ -34,7 +34,7 @@ export default function BookingDetailsModal({ show, onClose, booking }) {
           <div className="col-md-6">
             <div className="text-secondary small">Customer</div>
             <div className="fw-medium">
-              {booking.user?.firstName} {booking.user?.lastName}
+              {booking.contactFirstName || booking.user?.firstName} {booking.contactLastName || booking.user?.lastName}
             </div>
           </div>
 
@@ -45,7 +45,7 @@ export default function BookingDetailsModal({ show, onClose, booking }) {
 
           <div className="col-md-6">
             <div className="text-secondary small">Phone</div>
-            <div className="fw-medium">{booking.user?.phone || "-"}</div>
+            <div className="fw-medium">{booking.contactPhone || booking.user?.phone || "-"}</div>
           </div>
 
           <div className="col-md-6">

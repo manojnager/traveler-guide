@@ -130,9 +130,10 @@ export default function Bookings() {
       cell: (row) => (
         <div>
           <div className="fw-semibold">
-            {row.user?.firstName} {row.user?.lastName}
+            {row.contactFirstName || row.user?.firstName} {row.contactLastName || row.user?.lastName}
           </div>
           <div className="text-secondary small">{row.user?.email}</div>
+          {row.contactPhone && <div className="text-secondary small">{row.contactPhone}</div>}
         </div>
       )
     },
