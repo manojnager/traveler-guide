@@ -56,7 +56,7 @@ function Reviews({ destination }) {
 
               </div>
 
-              <strong>{review.rating}</strong>
+              <strong><div class="reviews-score">{review.rating}</div></strong>
 
             </div>
 

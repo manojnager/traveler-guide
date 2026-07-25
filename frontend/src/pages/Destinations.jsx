@@ -9,6 +9,8 @@ import DestinationsHero from "../components/DestinationsHero/DestinationsHero";
 import { getPublicDestinations } from "../services/destinationService";
 import { mapDestination } from "../utils/destinationMapper";
 
+import "./Destinations.css";
+
 function Destinations() {
   const [searchParams, setSearchParams] = useSearchParams();
 
@@ -95,33 +97,36 @@ function Destinations() {
         />
       </DestinationsHero>
 
-      <section className="section">
+      <section className="section destinations-results">
         <div className="container">
           <div className="results-header">
-            <h2>
-              {loading
-                ? "Loading destinations..."
-                : `${filteredDestinations.length} Destination${
-                    filteredDestinations.length !== 1 ? "s" : ""
-                  } Found`}
-            </h2>
-
-            <select value={sort} onChange={(e) => setSort(e.target.value)}>
-              <option value="featured">Featured</option>
-              <option value="price-low">Price Low - High</option>
-              <option value="price-high">Price High - Low</option>
-              <option value="rating">Highest Rated</option>
-            </select>
+            <div>
+              <h2>
+                {loading
+                  ? "Loading destinations..."
+                  : `${filteredDestinations.length} Destination${
+                      filteredDestinations.length !== 1 ? "s" : ""
+                    } Found`}
+              </h2>
+              {category !== "All" && !loading && (
+                <p className="results-subtext">
+                  Filtered by <strong>{category}</strong>
+                </p>
+              )}
+            </div>
           </div>
 
-          <div className="destination-grid">
+          <div className="destinations-page-grid">
             {loading &&
               Array.from({ length: 6 }).map((_, index) => (
-                <div key={index} className="destination-card" style={{ background: "#f4f6f8", minHeight: "360px" }} />
+                <div key={index} className="destination-card-skeleton" />
               ))}
 
             {!loading && filteredDestinations.length === 0 && (
-              <p>No destinations match your search.</p>
+              <div className="destinations-empty">
+                <h3>No destinations match your search</h3>
+                <p>Try adjusting your filters or search for something else.</p>
+              </div>
             )}
 
             {!loading &&

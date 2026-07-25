@@ -1,18 +1,20 @@
 import { useEffect, useState } from "react";
-import { useLocation, useNavigate, Link } from "react-router-dom";
+
+import { useSearchParams, useNavigate, Link } from "react-router-dom";
 import toast from "react-hot-toast";
 
-import { getPublicDestinationBySlug } from "../services/destinationService";
+import { getPublicDestinations } from "../services/destinationService";
 import { mapDestination } from "../utils/destinationMapper";
 import { createBooking } from "../services/bookingService";
-import { getImageUrl } from "../utils/image";
 import "./Checkout.css";
 
-function Checkout() {
-  const location = useLocation();
+export default function Checkout() {
+  const [searchParams] = useSearchParams();
   const navigate = useNavigate();
 
-  const { slug, travelDate, guests } = location.state || {};
+  const destinationId = searchParams.get("destinationId");
+  const travelDate = searchParams.get("date");
+  const guests = Number(searchParams.get("guests")) || 0;
 
   const [destination, setDestination] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -28,15 +30,24 @@ function Checkout() {
   });
 
   useEffect(() => {
-    if (!slug || !travelDate || !guests) {
+    if (!destinationId || !travelDate || !guests) {
       navigate("/destinations", { replace: true });
       return;
     }
 
     const loadDestination = async () => {
       try {
-        const data = await getPublicDestinationBySlug(slug);
-        setDestination(mapDestination(data));
+        const data = await getPublicDestinations();
+        const mapped = data.map(mapDestination);
+        const match = mapped.find((item) => item.id === Number(destinationId));
+
+        if (!match) {
+          toast.error("Destination not found.");
+          navigate("/destinations", { replace: true });
+          return;
+        }
+
+        setDestination(match);
       } catch {
         toast.error("Could not load destination details.");
         navigate("/destinations", { replace: true });
@@ -46,7 +57,7 @@ function Checkout() {
     };
 
     loadDestination();
-  }, [slug, travelDate, guests, navigate]);
+  }, [destinationId, travelDate, guests, navigate]);
 
   const handleChange = (e) => {
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -224,5 +235,3 @@ function Checkout() {
     </section>
   );
 }
-
-export default Checkout;

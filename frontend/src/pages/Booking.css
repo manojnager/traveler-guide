@@ -1,36 +1,38 @@
 .booking-page {
-  padding: 140px 0 80px;
+  padding: 160px 0 100px;
   min-height: 70vh;
 }
 
 .booking-page h1 {
-  font-size: 2.2rem;
-  margin-bottom: 8px;
+  font-size: 2.4rem;
+  color: var(--text);
+  margin-bottom: 10px;
 }
 
 .booking-subtitle {
-  color: #6c7a91;
-  margin-bottom: 40px;
+  color: var(--text-light);
+  margin-bottom: 45px;
+  font-size: 16px;
 }
 
 .booking-empty {
   text-align: center;
-  padding: 80px 0;
+  padding: 100px 0;
 }
 
 .booking-empty h1 {
-  margin-bottom: 12px;
+  margin-bottom: 14px;
 }
 
 .booking-empty p {
-  color: #6c7a91;
-  margin-bottom: 24px;
+  color: var(--text-light);
+  margin-bottom: 26px;
 }
 
 .booking-layout {
   display: grid;
   grid-template-columns: 1.3fr 1fr;
-  gap: 32px;
+  gap: 40px;
   align-items: start;
 }
 
@@ -42,110 +44,138 @@
 
 .booking-summary-card,
 .booking-form-card {
-  background: #fff;
-  border: 1px solid #e6e7e9;
-  border-radius: 10px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
   overflow: hidden;
 }
 
 .booking-summary-card img {
   width: 100%;
-  height: 260px;
+  height: 280px;
   object-fit: cover;
   display: block;
 }
 
 .booking-summary-content {
-  padding: 24px;
+  padding: 30px;
 }
 
 .booking-summary-category {
   display: inline-block;
-  font-size: 0.75rem;
+  font-size: 12px;
   text-transform: uppercase;
-  letter-spacing: 1px;
-  color: #206bc4;
-  margin-bottom: 8px;
+  letter-spacing: 2px;
+  color: var(--primary);
+  margin-bottom: 12px;
 }
 
 .booking-summary-content h2 {
-  margin: 0 0 6px;
-  font-size: 1.5rem;
+  margin: 0 0 8px;
+  font-size: 30px;
+  color: var(--text);
+  font-family: var(--font-heading);
 }
 
 .booking-summary-location {
-  color: #6c7a91;
-  margin-bottom: 16px;
+  color: var(--text-light);
+  margin-bottom: 18px;
+  font-size: 14px;
 }
 
 .booking-summary-desc {
-  color: #4b5563;
-  line-height: 1.6;
+  color: var(--text-light);
+  line-height: 1.8;
 }
 
 .booking-form-card {
-  padding: 28px;
+  padding: 34px;
+  position: sticky;
+  top: 100px;
 }
 
 .booking-form-card h3 {
-  margin: 0 0 20px;
-  font-size: 1.2rem;
+  margin: 0 0 24px;
+  font-size: 20px;
+  color: var(--text);
 }
 
 .booking-field {
-  margin-bottom: 18px;
+  margin-bottom: 22px;
 }
 
 .booking-field label {
   display: block;
-  font-size: 0.85rem;
-  font-weight: 600;
-  margin-bottom: 6px;
+  font-size: 12px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--primary);
+  margin-bottom: 10px;
 }
 
 .booking-field input,
 .booking-field select {
   width: 100%;
-  padding: 12px 14px;
-  border: 1px solid #d7dade;
-  border-radius: 6px;
-  font-size: 0.95rem;
+  height: 52px;
+  padding: 0 16px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  color: var(--text);
+  font-family: "Inter", sans-serif;
+  font-size: 15px;
+}
+
+.booking-field input:focus,
+.booking-field select:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+
+.booking-field input[type="date"] {
+  color-scheme: dark;
 }
 
 .booking-price-row {
   display: flex;
   justify-content: space-between;
-  padding: 10px 0;
-  border-bottom: 1px solid #eef0f2;
-  color: #4b5563;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border);
+  color: var(--text-light);
+  font-size: 15px;
 }
 
 .booking-total-row {
   border-bottom: none;
-  font-size: 1.1rem;
-  color: #111;
-  padding-top: 16px;
+  font-size: 20px;
+  color: var(--text);
+  padding-top: 20px;
+  font-weight: 600;
+}
+
+.booking-total-row strong {
+  color: var(--primary);
 }
 
 .booking-btn {
   display: block;
   width: 100%;
   text-align: center;
-  margin-top: 24px;
-  padding: 14px;
-  background: #206bc4;
-  color: #fff;
+  margin-top: 26px;
+  padding: 17px;
+  background: var(--primary);
+  color: #08111f;
   border: none;
-  border-radius: 6px;
+  border-radius: 10px;
   font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 1px;
+  letter-spacing: 1.5px;
   cursor: pointer;
   text-decoration: none;
-  transition: 0.25s;
+  transition: var(--transition);
 }
 
 .booking-btn:hover {
-  background: #1a5aa3;
-  color: #fff;
+  background: var(--primary-hover);
+  color: #08111f;
 }

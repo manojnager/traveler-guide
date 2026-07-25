@@ -60,7 +60,7 @@ function RelatedDestinations({ destination }) {
 
         <div className="destination-grid">
           {loading &&
-            Array.from({ length: 3 }).map((_, index) => (
+            Array.from({ length: 4 }).map((_, index) => (
               <div
                 key={index}
                 className="destination-card"

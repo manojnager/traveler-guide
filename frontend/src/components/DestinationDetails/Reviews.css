@@ -30,7 +30,20 @@ font-size:42px;
 font-weight:700;
 border-radius:18px;
 }
-
+.review-header .reviews-score {
+    width: 36px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #c8a96a;
+    color: #111;
+    font-size: 14px;
+    font-weight: 700;
+    border-radius: 6px;
+    line-height: 10px;
+    text-align: center;
+}
 .reviews-stars{
 display:flex;
 gap:6px;
