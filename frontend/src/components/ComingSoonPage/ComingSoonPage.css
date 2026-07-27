@@ -1,0 +1,140 @@
+.coming-soon-page {
+  position: relative;
+  min-height: 90vh;
+  display: flex;
+  align-items: center;
+  padding: 160px 0 100px;
+  background-size: cover;
+  background-position: center;
+}
+
+.coming-soon-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(rgba(8, 17, 31, 0.9), rgba(8, 17, 31, 0.82));
+}
+
+.coming-soon-content {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  max-width: 620px;
+  margin: 0 auto;
+}
+
+.coming-soon-icon {
+  width: 76px;
+  height: 76px;
+  margin: 0 auto 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: rgba(200, 169, 106, 0.12);
+  border: 1px solid rgba(200, 169, 106, 0.3);
+  color: var(--primary);
+  font-size: 28px;
+}
+
+.coming-soon-eyebrow {
+  display: inline-block;
+  color: var(--primary);
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  font-size: 12px;
+  margin-bottom: 18px;
+}
+
+.coming-soon-content h1 {
+  font-size: 52px;
+  margin-bottom: 24px;
+  line-height: 1.15;
+}
+
+.coming-soon-divider {
+  width: 60px;
+  height: 2px;
+  background: var(--primary);
+  margin: 0 auto 28px;
+}
+
+.coming-soon-content p {
+  color: var(--text-light);
+  font-size: 17px;
+  line-height: 1.9;
+  margin-bottom: 42px;
+}
+
+.coming-soon-form {
+  display: flex;
+  gap: 12px;
+  max-width: 440px;
+  margin: 0 auto 34px;
+}
+
+.coming-soon-form input {
+  flex: 1;
+  height: 56px;
+  padding: 0 20px;
+  background: rgba(17, 27, 43, 0.8);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  color: var(--text);
+  font-family: "Inter", sans-serif;
+  font-size: 15px;
+}
+
+.coming-soon-form input:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+
+.coming-soon-form input::placeholder {
+  color: var(--text-light);
+}
+
+.coming-soon-form button {
+  padding: 0 30px;
+  background: var(--primary);
+  border: none;
+  border-radius: 10px;
+  color: #08111f;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: var(--transition);
+  white-space: nowrap;
+}
+
+.coming-soon-form button:hover {
+  background: var(--primary-hover);
+}
+
+.coming-soon-back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--text-light);
+  text-decoration: none;
+  font-size: 14px;
+  letter-spacing: 0.5px;
+  transition: var(--transition);
+}
+
+.coming-soon-back-link:hover {
+  color: var(--primary);
+}
+
+@media (max-width: 576px) {
+  .coming-soon-content h1 {
+    font-size: 36px;
+  }
+
+  .coming-soon-form {
+    flex-direction: column;
+  }
+
+  .coming-soon-form button {
+    height: 52px;
+  }
+}

@@ -1,0 +1,332 @@
+.gallery-hero {
+  position: relative;
+  padding: 200px 0 90px;
+  text-align: center;
+  background-size: cover;
+  background-position: center;
+  border-bottom: 1px solid var(--border);
+}
+
+.gallery-hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(rgba(8, 17, 31, 0.9), rgba(8, 17, 31, 0.8));
+}
+
+.gallery-hero .container {
+  position: relative;
+  z-index: 2;
+}
+
+.gallery-hero span {
+  display: inline-block;
+  color: var(--primary);
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  font-size: 12px;
+  margin-bottom: 18px;
+}
+
+.gallery-hero h1 {
+  font-size: 48px;
+  margin-bottom: 18px;
+}
+
+.gallery-hero p {
+  max-width: 560px;
+  margin: 0 auto;
+  color: var(--text-light);
+  font-size: 16px;
+  line-height: 1.8;
+}
+
+.gallery-section {
+  padding-top: 70px;
+}
+
+/* Filter chips */
+.gallery-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 50px;
+}
+
+.gallery-filter-chip {
+  padding: 10px 24px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 30px;
+  color: var(--text-light);
+  font-size: 13px;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.gallery-filter-chip:hover {
+  border-color: rgba(200, 169, 106, 0.4);
+  color: var(--text);
+}
+
+.gallery-filter-chip.is-active {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: #08111f;
+  font-weight: 600;
+}
+
+/* Masonry grid — CSS columns, no gaps possible */
+.gallery-masonry {
+  column-count: 3;
+  column-gap: 24px;
+}
+
+.gallery-tile {
+  position: relative;
+  width: 100%;
+  border: none;
+  border-radius: 14px;
+  overflow: hidden;
+  padding: 0;
+  cursor: pointer;
+  background: var(--card);
+  display: block;
+  break-inside: avoid;
+  margin-bottom: 18px;
+}
+
+.gallery-tile img {
+  width: 100%;
+  height: auto;
+  display: block;
+  transition: transform 0.5s ease;
+}
+
+.gallery-tile:hover img {
+  transform: scale(1.06);
+}
+
+.gallery-skeleton {
+  break-inside: avoid;
+  margin-bottom: 18px;
+  border-radius: 14px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+/* Skeleton loading */
+.gallery-skeleton {
+  border-radius: 14px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+
+.gallery-skeleton::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.04), transparent);
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+.gallery-tile-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  padding: 20px;
+  background: linear-gradient(to top, rgba(8, 17, 31, 0.92) 0%, transparent 55%);
+  opacity: 0;
+  transition: var(--transition);
+}
+
+.gallery-tile-text {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.gallery-tile-category {
+  color: var(--primary);
+  font-size: 11px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+}
+.gallery-empty {
+  text-align: center;
+  color: var(--text-light);
+  padding: 60px 0;
+}
+.gallery-tile-expand {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: rgba(8, 17, 31, 0.7);
+  backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 13px;
+  flex-shrink: 0;
+}
+
+/* Lightbox */
+.gallery-lightbox {
+  position: fixed;
+  inset: 0;
+  background: rgba(8, 17, 31, 0.96);
+  z-index: 999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  cursor: zoom-out;
+}
+
+.gallery-lightbox img {
+  max-width: 90%;
+  max-height: 72vh;
+  object-fit: contain;
+  border-radius: 12px;
+  cursor: default;
+  box-shadow: var(--shadow);
+}
+
+.gallery-lightbox-close {
+  position: absolute;
+  top: 30px;
+  right: 40px;
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 40px;
+  cursor: pointer;
+  line-height: 1;
+}
+
+.gallery-lightbox-caption {
+  margin-top: 22px;
+  text-align: center;
+}
+
+.gallery-lightbox-category {
+  display: block;
+  color: var(--primary);
+  font-size: 12px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.gallery-lightbox-title {
+  display: block;
+  color: #fff;
+  font-size: 20px;
+  margin-bottom: 12px;
+}
+
+.gallery-lightbox-caption a {
+  color: var(--primary);
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.gallery-lightbox-caption a:hover {
+  color: var(--primary-hover);
+}
+
+@media (max-width: 992px) {
+  .gallery-masonry {
+    column-count: 2;
+  }
+}
+
+@media (max-width: 640px) {
+  .gallery-masonry {
+    column-count: 2;
+    column-gap: 12px;
+  }
+
+  .gallery-tile,
+  .gallery-skeleton {
+    margin-bottom: 12px;
+  }
+
+  .gallery-hero h1 {
+    font-size: 34px;
+  }
+}
+.gallery-lightbox-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(6px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #fff;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: var(--transition);
+  z-index: 2;
+}
+
+.gallery-lightbox-nav:hover {
+  background: var(--primary);
+  color: #08111f;
+  border-color: var(--primary);
+}
+
+.gallery-lightbox-prev {
+  left: 30px;
+}
+
+.gallery-lightbox-next {
+  right: 30px;
+}
+
+.gallery-lightbox-counter {
+  position: absolute;
+  top: 30px;
+  left: 40px;
+  color: var(--text-light);
+  font-size: 13px;
+  letter-spacing: 1px;
+}
+
+@media (max-width: 768px) {
+  .gallery-lightbox-nav {
+    width: 42px;
+    height: 42px;
+    font-size: 14px;
+  }
+
+  .gallery-lightbox-prev {
+    left: 12px;
+  }
+
+  .gallery-lightbox-next {
+    right: 12px;
+  }
+
+  .gallery-lightbox-counter {
+    top: 20px;
+    left: 20px;
+  }
+}

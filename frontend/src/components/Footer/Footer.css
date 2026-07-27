@@ -85,9 +85,11 @@ margin-bottom:30px;
 }
 
 .back-top {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font: inherit;
   color: var(--primary);
-  text-decoration: none;
-  transition: .3s;
 }
 
 .back-top:hover {
