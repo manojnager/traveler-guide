@@ -6,7 +6,8 @@ import {
   deleteDestination,
   getDestinations,
   getDestinationBySlug,
-  getAdminDestinations
+  getAdminDestinations,
+  getAdminDestinationById
 } from "./destination.service.js";
 
 import {
@@ -84,6 +85,27 @@ export const adminIndex = async (
       res,
       "Destinations fetched successfully.",
       destinations
+    );
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const adminShow = async (
+  req,
+  res,
+  next
+) => {
+  try {
+    const destination =
+      await getAdminDestinationById(
+        req.params.id
+      );
+
+    return successResponse(
+      res,
+      "Destination fetched successfully.",
+      destination
     );
   } catch (error) {
     next(error);

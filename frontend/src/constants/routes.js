@@ -8,7 +8,14 @@ const ROUTES = {
   BOOKING: "/booking",
   CHECKOUT: "/checkout",
   LOGIN: "/login",
-  REGISTER: "/register"
+  REGISTER: "/register",
+  EXPERIENCES: "/experiences",
+  TRAVEL_JOURNAL: "/travel-journal",
+  GALLERY: "/gallery",
+  HELP_CENTER: "/help-center",
+  FAQS: "/faqs",
+  PRIVACY_POLICY: "/privacy-policy",
+  TERMS: "/terms-and-conditions"
 };
 
 export default ROUTES;

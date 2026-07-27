@@ -16,6 +16,13 @@ import Login from "../pages/Login";
 import Register from "../pages/Register";
 import NotFound from "../pages/NotFound";
 import AdminRoutes from "../admin/routes/AdminRoutes";
+import Experiences from "../pages/Experiences";
+import TravelJournal from "../pages/TravelJournal";
+import Gallery from "../pages/Gallery";
+import HelpCenter from "../pages/HelpCenter";
+import FAQs from "../pages/FAQs";
+import PrivacyPolicy from "../pages/PrivacyPolicy";
+import Terms from "../pages/Terms";
 
 function AppRoutes() {
   return (
@@ -26,6 +33,13 @@ function AppRoutes() {
         <Route path={ROUTES.ABOUT} element={<About />} />
 
         <Route path={ROUTES.CONTACT} element={<Contact />} />
+        <Route path={ROUTES.EXPERIENCES} element={<Experiences />} />
+        <Route path={ROUTES.TRAVEL_JOURNAL} element={<TravelJournal />} />
+        <Route path={ROUTES.GALLERY} element={<Gallery />} />
+        <Route path={ROUTES.HELP_CENTER} element={<HelpCenter />} />
+        <Route path={ROUTES.FAQS} element={<FAQs />} />
+        <Route path={ROUTES.PRIVACY_POLICY} element={<PrivacyPolicy />} />
+        <Route path={ROUTES.TERMS} element={<Terms />} />
 
         <Route path={ROUTES.DESTINATIONS} element={<Destinations />} />
 

@@ -1,6 +1,6 @@
+import { useEffect, useState } from "react";
 import { useParams, Navigate } from "react-router-dom";
-
-import destinations from "../data/destinations";
+import toast from "react-hot-toast";
 
 import DestinationGallery from "../components/DestinationDetails/DestinationGallery";
 import BookingCard from "../components/DestinationDetails/BookingCard";
@@ -10,15 +10,49 @@ import Reviews from "../components/DestinationDetails/Reviews";
 import RelatedDestinations from "../components/DestinationDetails/RelatedDestinations";
 import BookingCTA from "../components/DestinationDetails/BookingCTA";
 
+import { getPublicDestinationBySlug } from "../services/destinationService";
+import { mapDestination } from "../utils/destinationMapper";
+
 function DestinationDetails() {
   const { slug } = useParams();
 
-  const destination = destinations.find(
-    (item) => item.slug === slug
-  );
+  const [destination, setDestination] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [notFound, setNotFound] = useState(false);
 
-  if (!destination) {
+  useEffect(() => {
+    const loadDestination = async () => {
+      setLoading(true);
+      setNotFound(false);
+
+      try {
+        const data = await getPublicDestinationBySlug(slug);
+        setDestination(mapDestination(data));
+      } catch (error) {
+        if (error.response?.status === 404) {
+          setNotFound(true);
+        } else {
+          toast.error("Failed to load destination.");
+        }
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadDestination();
+  }, [slug]);
+
+  if (notFound) {
     return <Navigate to="/404" replace />;
+  }
+
+  if (loading || !destination) {
+    return (
+      <main
+        className="destination-details"
+        style={{ minHeight: "60vh" }}
+      />
+    );
   }
 
   return (
@@ -53,7 +87,9 @@ function DestinationDetails() {
             <RelatedDestinations
               destination={destination}
             />
-            <BookingCTA />
+            <BookingCTA
+              destinationId={destination.id}
+            />
 
           </div>
 

@@ -91,7 +91,7 @@ margin-bottom:16px;
 .section-title h2{
 font-size:58px;
 margin-bottom:18px;
-font-family:var(--font-heading);
+/* font-family:var(--font-heading); */
 }
 
 .section-title p{
@@ -165,4 +165,10 @@ color:#c5ced8;
 .details-layout{
 grid-template-columns:1fr;
 }
+}
+.rdt_TableBody .avatar {
+    background-size: cover;
+    min-width: 52px;
+    height: 45px;
+    background-position: top;
 }

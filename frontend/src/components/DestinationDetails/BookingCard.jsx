@@ -1,16 +1,51 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 import {
   FaCalendarAlt,
   FaGlobeAsia,
   FaShieldAlt,
   FaStar,
-  FaUserFriends
+  FaUserFriends,
+  FaHeart,
+  FaRegHeart
 } from "react-icons/fa";
+
+import { isWishlisted, toggleWishlist } from "../../utils/wishlist";
 
 import "./BookingCard.css";
 
 function BookingCard({ destination }) {
+  const navigate = useNavigate();
+
   const [guests, setGuests] = useState(2);
+  const [travelDate, setTravelDate] = useState("");
+  const [saved, setSaved] = useState(isWishlisted(destination.slug));
+
+  const today = new Date().toISOString().split("T")[0];
+
+  const handleReserve = () => {
+    if (!travelDate) {
+      toast.error("Please select a travel date.");
+      return;
+    }
+
+    const params = new URLSearchParams({
+      destinationId: destination.id,
+      guests: String(guests),
+      date: travelDate
+    });
+
+    navigate(`/booking?${params.toString()}`);
+  };
+
+  const handleWishlistToggle = () => {
+    const nowSaved = toggleWishlist(destination.slug);
+    setSaved(nowSaved);
+    toast.success(
+      nowSaved ? "Added to your wishlist." : "Removed from wishlist."
+    );
+  };
 
   return (
     <aside className="booking-card">
@@ -40,7 +75,9 @@ function BookingCard({ destination }) {
 
           <input
             type="date"
-            min={new Date().toISOString().split("T")[0]}
+            min={today}
+            value={travelDate}
+            onChange={(e) => setTravelDate(e.target.value)}
           />
         </div>
 
@@ -51,12 +88,15 @@ function BookingCard({ destination }) {
             value={guests}
             onChange={(e) => setGuests(Number(e.target.value))}
           >
-            {[1,2,3,4,5,6,7,8].map((item)=>(
+            {Array.from(
+              { length: destination.maxGuests || 8 },
+              (_, i) => i + 1
+            ).map((item) => (
               <option
                 key={item}
                 value={item}
               >
-                {item} Guest{item>1?"s":""}
+                {item} Guest{item > 1 ? "s" : ""}
               </option>
             ))}
           </select>
@@ -78,7 +118,7 @@ function BookingCard({ destination }) {
 
         <li>
           <FaUserFriends />
-          <span>{guests} Guest{guests>1?"s":""}</span>
+          <span>{guests} Guest{guests > 1 ? "s" : ""}</span>
         </li>
 
         <li>
@@ -98,12 +138,21 @@ function BookingCard({ destination }) {
 
       </div>
 
-      <button className="booking-btn">
+      <button
+        className="booking-btn"
+        type="button"
+        onClick={handleReserve}
+      >
         Reserve Your Journey
       </button>
 
-      <button className="wishlist-outline">
-        Save to Wishlist
+      <button
+        className="wishlist-outline"
+        type="button"
+        onClick={handleWishlistToggle}
+      >
+        {saved ? <FaHeart /> : <FaRegHeart />}{" "}
+        {saved ? "Saved to Wishlist" : "Save to Wishlist"}
       </button>
 
     </aside>

@@ -8,6 +8,8 @@ import notFound from "./middlewares/notFound.js";
 import errorHandler from "./middlewares/errorHandler.js";
 import authRoutes from "./modules/auth/auth.routes.js";
 import destinationRoutes from "./modules/destination/destination.routes.js";
+import bookingRoutes from "./modules/booking/booking.routes.js";
+
 import uploadRoutes from "./modules/upload/upload.routes.js";
 
 import adminRoutes from "./modules/admin/admin.routes.js";
@@ -21,7 +23,13 @@ app.use(
   })
 );
 
-app.use(helmet());
+app.use(
+  helmet({
+    crossOriginResourcePolicy: {
+      policy: "cross-origin",
+    },
+  })
+);
 
 app.use(morgan("dev"));
 
@@ -45,6 +53,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/upload", uploadRoutes);
 
 app.use("/api/destinations", destinationRoutes);
+app.use("/api/bookings", bookingRoutes);
 
 app.use("/api/admin", adminRoutes);
 

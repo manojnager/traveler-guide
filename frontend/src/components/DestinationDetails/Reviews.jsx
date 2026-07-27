@@ -2,6 +2,15 @@ import { FaStar } from "react-icons/fa";
 import "./Reviews.css";
 
 function Reviews({ destination }) {
+  if (!destination.reviews || destination.reviews.length === 0) {
+    return (
+      <section className="reviews-section">
+        <h2>Traveler Reviews</h2>
+        <p>No reviews yet — be the first to share your experience.</p>
+      </section>
+    );
+  }
+
   return (
     <section className="reviews-section">
 
@@ -45,11 +54,9 @@ function Reviews({ destination }) {
 
                 <h3>{review.name}</h3>
 
-                <span>{review.country}</span>
-
               </div>
 
-              <strong>{review.rating}</strong>
+              <strong><div class="reviews-score">{review.rating}</div></strong>
 
             </div>
 

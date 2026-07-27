@@ -106,6 +106,36 @@ export const getDestinations = async () => {
   });
 };
 
+export const getAdminDestinationById = async (id) => {
+  const destination = await prisma.destination.findUnique({
+    where: {
+      id: Number(id)
+    },
+    include: {
+      category: true,
+      country: true,
+      city: true,
+      images: true,
+      itineraries: true,
+      amenities: {
+        include: {
+          amenity: true
+        }
+      },
+      highlights: true
+    }
+  });
+
+  if (!destination) {
+    throw new AppError(
+      "Destination not found.",
+      404
+    );
+  }
+
+  return destination;
+};
+
 export const getDestinationBySlug = async (slug) => {
   const destination = await prisma.destination.findUnique({
     where: {
@@ -123,7 +153,19 @@ export const getDestinationBySlug = async (slug) => {
         }
       },
       highlights: true,
-      reviews: true
+      reviews: {
+        where: {
+          isHidden: false
+        },
+        include: {
+          user: {
+            select: {
+              firstName: true,
+              lastName: true
+            }
+          }
+        }
+      }
     }
   });
 
@@ -267,44 +309,6 @@ export const updateDestination = async (
           }))
         });
       }
-    }
-
-    if (data.gallery) {
-      await tx.destinationImage.createMany({
-        data: data.gallery.map((image) => ({
-          destinationId: Number(id),
-          image
-        }))
-      });
-    }
-
-    if (data.amenities) {
-      await tx.destinationAmenity.createMany({
-        data: data.amenities.map((amenityId) => ({
-          destinationId: Number(id),
-          amenityId
-        }))
-      });
-    }
-
-    if (data.highlights) {
-      await tx.destinationHighlight.createMany({
-        data: data.highlights.map((title) => ({
-          destinationId: Number(id),
-          title
-        }))
-      });
-    }
-
-    if (data.itinerary) {
-      await tx.itinerary.createMany({
-        data: data.itinerary.map((item) => ({
-          destinationId: Number(id),
-          day: item.day,
-          title: item.title,
-          description: item.description
-        }))
-      });
     }
 
     return tx.destination.findUnique({

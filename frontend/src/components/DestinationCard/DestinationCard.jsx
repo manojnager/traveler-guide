@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { FaHeart, FaRegHeart, FaStar, FaClock } from "react-icons/fa";
+import { FaHeart, FaRegHeart, FaStar, FaClock, FaMapMarkerAlt, FaUserFriends } from "react-icons/fa";
 import { useState } from "react";
 import "./DestinationCard.css";
 
@@ -9,62 +9,66 @@ function DestinationCard({ destination }) {
   return (
     <article className="destination-card">
       <div className="destination-image">
-
         <img
           src={destination.image}
           alt={destination.title}
+          onError={(e) => {
+            e.target.onerror = null;
+            e.target.src = "https://placehold.co/600x400/162235/B6C2D2?text=No+Image";
+          }}
         />
+        <div className="destination-image-gradient" />
 
-        {destination.featured && (
-          <span className="featured-badge">
-            Featured
-          </span>
-        )}
+        {destination.featured && <span className="featured-badge">Featured</span>}
 
         <button
           className="wishlist-btn"
+          type="button"
           onClick={() => setFavorite(!favorite)}
+          aria-label="Toggle wishlist"
         >
           {favorite ? <FaHeart /> : <FaRegHeart />}
         </button>
 
-        <span className="destination-price">
-          ${destination.price}
+        <span className="destination-rating-badge">
+          <FaStar /> {destination.rating}
         </span>
 
+        <div className="destination-image-location">
+          <FaMapMarkerAlt /> {destination.location}
+        </div>
       </div>
 
       <div className="destination-content">
-
-        <span className="destination-category">
-          {destination.category}
-        </span>
+        <span className="destination-category">{destination.category}</span>
 
         <h3>{destination.title}</h3>
 
-        <p>{destination.country}</p>
+        {destination.shortDescription && (
+          <p className="destination-description">{destination.shortDescription}</p>
+        )}
 
         <div className="destination-meta">
-
           <span>
-            <FaClock />
-            {destination.duration}
+            <FaClock /> {destination.duration}
           </span>
-
-          <span>
-            <FaStar />
-            {destination.rating}
-          </span>
-
+          {destination.maxGuests && (
+            <span>
+              <FaUserFriends /> Up to {destination.maxGuests}
+            </span>
+          )}
         </div>
 
-        <Link
-          className="destination-btn"
-          to={`/destinations/${destination.slug}`}
-        >
-          View Details
-        </Link>
+        <div className="destination-footer">
+          <div className="destination-price-block">
+            <span className="destination-price-label">From</span>
+            <span className="destination-price">${destination.price}</span>
+          </div>
 
+          <Link className="destination-btn" to={`/destinations/${destination.slug}`}>
+            View Details
+          </Link>
+        </div>
       </div>
     </article>
   );
