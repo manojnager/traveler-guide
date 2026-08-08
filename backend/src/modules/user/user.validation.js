@@ -19,3 +19,15 @@ export const updateUserSchema = z.object({
   roleId: z.coerce.number().int().positive().optional(),
   status: z.enum(["ACTIVE", "INACTIVE"]).optional()
 });
+
+export const updateProfileSchema = z.object({
+  firstName: z.string().min(2).max(100).optional(),
+  lastName: z.string().min(2).max(100).optional(),
+  phone: z.string().max(20).optional().or(z.literal("")),
+  avatar: z.string().optional().or(z.literal(""))
+});
+
+export const changePasswordSchema = z.object({
+  currentPassword: z.string().min(1, "Current password is required."),
+  newPassword: z.string().min(6, "New password must be at least 6 characters.")
+});

@@ -1,7 +1,8 @@
 import { NavLink } from "react-router-dom";
 import {
   IconLayoutDashboard, IconMap2, IconPlus, IconCategory, IconWorld,
-  IconMapPin, IconChecklist, IconCalendarEvent, IconUsers, IconStar, IconHeart, IconSettings, IconX
+  IconMapPin, IconChecklist, IconCalendarEvent, IconUsers, IconSettings, IconX,
+  IconMail, IconHeart, IconStar, IconMailForward
 } from "@tabler/icons-react";
 import { useSidebar } from "../context/SidebarContext";
 
@@ -22,6 +23,8 @@ const menuSections = [
       { title: "Cities", icon: IconMapPin, path: "/admin/cities" },
       { title: "Amenities", icon: IconChecklist, path: "/admin/amenities" },
       { title: "Wishlist", icon: IconHeart, path: "/admin/wishlist" },
+      { title: "Contact Messages", icon: IconMail, path: "/admin/contact-messages" },
+      { title: "Email Logs", icon: IconMailForward, path: "/admin/email-logs" },
     ]
   },
   {

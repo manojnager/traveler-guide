@@ -6,11 +6,13 @@ import toast from "react-hot-toast";
 import { getPublicDestinations } from "../services/destinationService";
 import { mapDestination } from "../utils/destinationMapper";
 import { createBooking } from "../services/bookingService";
+import { useAuth } from "../context/AuthContext";
 import "./Checkout.css";
 
 export default function Checkout() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
+  const { user, isAuthenticated } = useAuth();
 
   const destinationId = searchParams.get("destinationId");
   const travelDate = searchParams.get("date");
@@ -28,6 +30,19 @@ export default function Checkout() {
     phone: "",
     paymentMethod: "Credit Card"
   });
+
+  // Prefill the form with the logged-in user's details
+  useEffect(() => {
+    if (isAuthenticated && user) {
+      setForm((prev) => ({
+        ...prev,
+        firstName: user.firstName || "",
+        lastName: user.lastName || "",
+        email: user.email || "",
+        phone: user.phone || ""
+      }));
+    }
+  }, [isAuthenticated, user]);
 
   useEffect(() => {
     if (!destinationId || !travelDate || !guests) {
@@ -136,9 +151,15 @@ export default function Checkout() {
               </div>
             </div>
 
-            <Link to="/destinations" className="checkout-confirmation-btn">
-              Explore More Destinations
-            </Link>
+            {isAuthenticated ? (
+              <Link to="/account" className="checkout-confirmation-btn">
+                View My Bookings
+              </Link>
+            ) : (
+              <Link to="/destinations" className="checkout-confirmation-btn">
+                Explore More Destinations
+              </Link>
+            )}
           </div>
         </div>
       </section>
@@ -157,6 +178,12 @@ export default function Checkout() {
           <div className="checkout-form-card">
             <h3>Contact Details</h3>
 
+            {isAuthenticated && (
+              <p className="checkout-logged-in-note">
+                Booking as <strong>{user?.email}</strong>. This booking will be linked to your account.
+              </p>
+            )}
+
             <form onSubmit={handleSubmit}>
               <div className="checkout-form-row">
                 <div className="checkout-field">
@@ -171,7 +198,19 @@ export default function Checkout() {
 
               <div className="checkout-field">
                 <label>Email Address</label>
-                <input type="email" name="email" value={form.email} onChange={handleChange} required />
+                <input
+                  type="email"
+                  name="email"
+                  value={form.email}
+                  onChange={handleChange}
+                  disabled={isAuthenticated}
+                  required
+                />
+                {isAuthenticated && (
+                  <span className="checkout-field-hint">
+                    Locked to your account email. Not you? <Link to="/login">Switch account</Link>
+                  </span>
+                )}
               </div>
 
               <div className="checkout-field">

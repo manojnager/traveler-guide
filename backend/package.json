@@ -28,6 +28,7 @@
     "morgan": "^1.11.0",
     "multer": "^2.2.0",
     "mysql2": "^3.22.6",
+    "nodemailer": "^9.0.3",
     "prisma": "^6.19.3",
     "react-hot-toast": "^2.6.0",
     "react-icons": "^5.7.0",

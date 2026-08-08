@@ -131,3 +131,53 @@ export const uploadGallery = async (
     next(error);
   }
 };
+
+export const uploadAvatar = async (
+  req,
+  res,
+  next
+) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({
+        success: false,
+        message: "No image uploaded."
+      });
+    }
+
+    const filename = `${uuid()}.webp`;
+    const directory = path.resolve(
+      process.cwd(),
+      "uploads",
+      "avatars"
+    );
+    fs.mkdirSync(directory, {
+      recursive: true
+    });
+    const filepath = path.join(
+      directory,
+      filename
+    );
+
+    await sharp(req.file.buffer)
+      .resize({
+        width: 300,
+        height: 300,
+        fit: "cover"
+      })
+      .webp({
+        quality: 85
+      })
+      .toFile(filepath);
+
+    res.json({
+      success: true,
+      data: {
+        filename,
+        path: `/uploads/avatars/${filename}`
+      }
+    });
+  } catch (error) {
+    next(error);
+  }
+};

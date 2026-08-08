@@ -15,7 +15,10 @@ const ROUTES = {
   HELP_CENTER: "/help-center",
   FAQS: "/faqs",
   PRIVACY_POLICY: "/privacy-policy",
-  TERMS: "/terms-and-conditions"
+  TERMS: "/terms-and-conditions",
+  FORGOT_PASSWORD: "/forgot-password",
+  RESET_PASSWORD: "/reset-password",
+  ACCOUNT: "/account",
 };
 
 export default ROUTES;

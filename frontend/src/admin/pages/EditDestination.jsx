@@ -6,6 +6,7 @@ import toast from "react-hot-toast";
 import { ClipLoader } from "react-spinners";
 import { IconPlus, IconTrash } from "@tabler/icons-react";
 
+import BlockedDatesManager from "../components/destination/BlockedDatesManager";
 import PageHeader from "../components/common/PageHeader";
 import PageLoader from "../components/loader/PageLoader";
 import ImageUploader from "../components/form/ImageUploader";
@@ -1000,6 +1001,19 @@ export default function EditDestination() {
                     </div>
                   )}
                 </div>
+                <div className="card">
+                  <div className="card-header">
+                    <h3 className="card-title">Availability Calendar</h3>
+                  </div>
+                  <div className="card-body">
+                    <p className="text-secondary small mb-3">
+                      Click a date to mark it unavailable for booking. Click a blocked date again to unblock it.
+                    </p>
+                    <BlockedDatesManager destinationId={id} />
+                  </div>
+                </div>
+                  
+
               </div>
             </div>
 

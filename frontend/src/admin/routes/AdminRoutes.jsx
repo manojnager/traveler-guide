@@ -19,6 +19,8 @@ import Users from "../pages/Users";
 import Reviews from "../pages/Reviews";
 import Wishlist from "../pages/Wishlist";
 import Settings from "../pages/Settings";
+import ContactMessages from "../pages/ContactMessages";
+import EmailLogs from "../pages/EmailLogs";
 
 import "../styles/admin.css";
 
@@ -43,6 +45,8 @@ function AdminRoutes() {
               <Route path="reviews" element={<Reviews />} />
               <Route path="wishlist" element={<Wishlist />} />
               <Route path="settings" element={<Settings />} />
+              <Route path="contact-messages" element={<ContactMessages />} />
+              <Route path="email-logs" element={<EmailLogs />} />
             </Route>
             <Route path="*" element={<Navigate to="/admin" replace />} />
           </Routes>

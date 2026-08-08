@@ -75,6 +75,24 @@ import {
 import { index as settingsIndex, update as settingsUpdate } from "../settings/settings.controller.js";
 import { index as roleIndex } from "../role/role.controller.js";
 
+import {
+  adminIndex as contactAdminIndex,
+  adminShow as contactAdminShow,
+  updateStatus as contactUpdateStatus,
+  destroy as contactDestroy
+} from "../contact/contact.controller.js";
+
+import { adminIndex as emailLogAdminIndex } from "../emailLog/emailLog.controller.js";
+
+import { testEmail as settingsTestEmail } from "../settings/settings.controller.js";
+
+import {
+  adminIndex as blockedDateAdminIndex,
+  store as blockedDateStore,
+  storeBulk as blockedDateStoreBulk,
+  destroy as blockedDateDestroy
+} from "../blockedDate/blockedDate.controller.js";
+
 const router = Router();
 
 router.use(auth);
@@ -135,5 +153,19 @@ router.delete("/wishlist/:userId/:destinationId", wishlistDestroy);
 
 router.get("/settings", settingsIndex);
 router.put("/settings", settingsUpdate);
+
+router.get("/contact-messages", contactAdminIndex);
+router.get("/contact-messages/:id", contactAdminShow);
+router.patch("/contact-messages/:id/status", contactUpdateStatus);
+router.delete("/contact-messages/:id", contactDestroy);
+
+router.get("/email-logs", emailLogAdminIndex);
+
+router.post("/settings/test-email", settingsTestEmail);
+
+router.get("/destinations/:destinationId/blocked-dates", blockedDateAdminIndex);
+router.post("/destinations/:destinationId/blocked-dates", blockedDateStore);
+router.post("/destinations/:destinationId/blocked-dates/bulk", blockedDateStoreBulk);
+router.delete("/blocked-dates/:id", blockedDateDestroy);
 
 export default router;

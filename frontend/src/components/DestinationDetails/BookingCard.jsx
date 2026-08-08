@@ -12,6 +12,7 @@ import {
 } from "react-icons/fa";
 
 import { isWishlisted, toggleWishlist } from "../../utils/wishlist";
+import BookingCalendar from "./BookingCalendar";
 
 import "./BookingCard.css";
 
@@ -21,8 +22,6 @@ function BookingCard({ destination }) {
   const [guests, setGuests] = useState(2);
   const [travelDate, setTravelDate] = useState("");
   const [saved, setSaved] = useState(isWishlisted(destination.slug));
-
-  const today = new Date().toISOString().split("T")[0];
 
   const handleReserve = () => {
     if (!travelDate) {
@@ -72,12 +71,10 @@ function BookingCard({ destination }) {
 
         <div className="booking-field">
           <label>Travel Date</label>
-
-          <input
-            type="date"
-            min={today}
+          <BookingCalendar
+            destinationId={destination.id}
             value={travelDate}
-            onChange={(e) => setTravelDate(e.target.value)}
+            onChange={setTravelDate}
           />
         </div>
 

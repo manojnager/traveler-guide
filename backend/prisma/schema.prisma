@@ -26,15 +26,17 @@ model Role {
 }
 
 model User {
-  id         Int        @id @default(autoincrement())
-  roleId     Int
-  firstName  String     @db.VarChar(100)
-  lastName   String     @db.VarChar(100)
-  email      String     @unique @db.VarChar(150)
-  password   String
-  phone      String?    @db.VarChar(20)
-  avatar     String?
-  status     UserStatus @default(ACTIVE)
+  id               Int        @id @default(autoincrement())
+  roleId           Int
+  firstName        String     @db.VarChar(100)
+  lastName         String     @db.VarChar(100)
+  email            String     @unique @db.VarChar(150)
+  password         String
+  phone            String?    @db.VarChar(20)
+  avatar           String?
+  status           UserStatus @default(ACTIVE)
+  resetToken       String?    @db.VarChar(255)
+  resetTokenExpiry DateTime?
   role       Role       @relation(fields: [roleId], references: [id])
   reviews    Review[]
   wishlists  Wishlist[]
@@ -112,6 +114,7 @@ model Destination {
   wishlists          Wishlist[]
   bookings           Booking[]
   highlights         DestinationHighlight[]
+  blockedDates       DestinationBlockedDate[]
 
   createdAt          DateTime             @default(now())
   updatedAt          DateTime             @updatedAt
@@ -230,6 +233,59 @@ model Booking {
   updatedAt     DateTime      @updatedAt
 
   @@index([userId])
+  @@index([destinationId])
+}
+
+enum ContactMessageStatus {
+  NEW
+  READ
+  RESPONDED
+}
+
+model ContactMessage {
+  id          Int                   @id @default(autoincrement())
+  name        String                @db.VarChar(150)
+  email       String                @db.VarChar(150)
+  phone       String?               @db.VarChar(20)
+  destination String?               @db.VarChar(150)
+  travelDate  DateTime?
+  guests      Int?
+  budget      String?               @db.VarChar(50)
+  subject     String?               @db.VarChar(200)
+  message     String                @db.LongText
+  status      ContactMessageStatus  @default(NEW)
+  createdAt   DateTime              @default(now())
+  updatedAt   DateTime              @updatedAt
+
+  @@index([status])
+}
+
+enum EmailLogStatus {
+  SENT
+  FAILED
+}
+
+model EmailLog {
+  id           Int             @id @default(autoincrement())
+  toEmail      String          @db.VarChar(150)
+  subject      String          @db.VarChar(255)
+  type         String          @db.VarChar(50)
+  status       EmailLogStatus
+  errorMessage String?         @db.LongText
+  createdAt    DateTime        @default(now())
+
+  @@index([status])
+  @@index([type])
+}
+
+model DestinationBlockedDate {
+  id            Int         @id @default(autoincrement())
+  destinationId Int
+  date          DateTime    @db.Date
+  reason        String?     @db.VarChar(200)
+  destination   Destination @relation(fields: [destinationId], references: [id], onDelete: Cascade)
+
+  @@unique([destinationId, date])
   @@index([destinationId])
 }
 

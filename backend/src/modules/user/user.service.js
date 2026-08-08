@@ -154,3 +154,39 @@ export const deleteUser = async (id, currentUserId) => {
 
   return prisma.user.delete({ where: { id: Number(id) } });
 };
+
+export const updateOwnProfile = async (userId, data) => {
+  return prisma.user.update({
+    where: { id: Number(userId) },
+    data: {
+      ...(data.firstName && { firstName: data.firstName }),
+      ...(data.lastName && { lastName: data.lastName }),
+      ...(data.phone !== undefined && { phone: data.phone || null }),
+      ...(data.avatar !== undefined && { avatar: data.avatar || null })
+    },
+    select: userSelect
+  });
+};
+
+export const changeOwnPassword = async (userId, currentPassword, newPassword) => {
+  const user = await prisma.user.findUnique({ where: { id: Number(userId) } });
+
+  if (!user) {
+    throw new AppError("User not found.", 404);
+  }
+
+  const isValid = await bcrypt.compare(currentPassword, user.password);
+
+  if (!isValid) {
+    throw new AppError("Current password is incorrect.", 401);
+  }
+
+  const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+  await prisma.user.update({
+    where: { id: Number(userId) },
+    data: { password: hashedPassword }
+  });
+
+  return { message: "Password updated successfully." };
+};
