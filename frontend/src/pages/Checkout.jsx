@@ -2,11 +2,15 @@ import { useEffect, useState } from "react";
 
 import { useSearchParams, useNavigate, Link } from "react-router-dom";
 import toast from "react-hot-toast";
+import { loadStripe } from "@stripe/stripe-js";
+import { Elements } from "@stripe/react-stripe-js";
 
 import { getPublicDestinations } from "../services/destinationService";
 import { mapDestination } from "../utils/destinationMapper";
 import { createBooking } from "../services/bookingService";
+import { getStripeConfig, createPaymentIntent, confirmPayment } from "../services/paymentService";
 import { useAuth } from "../context/AuthContext";
+import StripeCardForm from "../components/StripeCardForm/StripeCardForm";
 import "./Checkout.css";
 
 export default function Checkout() {
@@ -22,6 +26,12 @@ export default function Checkout() {
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [confirmedBooking, setConfirmedBooking] = useState(null);
+  const [paymentStatus, setPaymentStatus] = useState(null);
+
+  const [stripePromise, setStripePromise] = useState(null);
+  const [stripeEnabled, setStripeEnabled] = useState(false);
+  const [showCardStep, setShowCardStep] = useState(false);
+  const [pendingBooking, setPendingBooking] = useState(null);
 
   const [form, setForm] = useState({
     firstName: "",
@@ -30,6 +40,23 @@ export default function Checkout() {
     phone: "",
     paymentMethod: "Credit Card"
   });
+
+  // Load Stripe publishable key + enabled flag
+  useEffect(() => {
+    const loadStripeConfig = async () => {
+      try {
+        const config = await getStripeConfig();
+        if (config.enabled && config.publishableKey) {
+          setStripeEnabled(true);
+          setStripePromise(loadStripe(config.publishableKey));
+        }
+      } catch {
+        setStripeEnabled(false);
+      }
+    };
+
+    loadStripeConfig();
+  }, []);
 
   // Prefill the form with the logged-in user's details
   useEffect(() => {
@@ -85,11 +112,11 @@ export default function Checkout() {
       toast.error("Please fill in your name and email.");
       return;
     }
-
+    
     setSubmitting(true);
 
     try {
-      const booking = await createBooking({
+      const response = await createBooking({
         destinationId: destination.id,
         travelDate,
         guests,
@@ -100,12 +127,59 @@ export default function Checkout() {
         paymentMethod: form.paymentMethod
       });
 
-      setConfirmedBooking(booking);
+      const booking = response.booking;
+
+      if (form.paymentMethod === "Credit Card" && stripeEnabled) {
+        // Booking is created (status PENDING). Move to the card payment step
+        // instead of showing the confirmation screen immediately.
+        setPendingBooking(booking);
+        setShowCardStep(true);
+      } else {
+        // PayPal / Bank Transfer, or Stripe not configured — unchanged behavior
+        setConfirmedBooking(booking);
+        setPaymentStatus("PENDING");
+      }
     } catch (error) {
       const message = error.response?.data?.message || "Failed to complete booking.";
       toast.error(message);
     } finally {
       setSubmitting(false);
+    }
+  };
+
+  const handleStripePay = async (stripe, elements) => {
+    const { clientSecret } = await createPaymentIntent(pendingBooking.id);
+
+    const cardElement = elements.getElement("card");
+
+    const result = await stripe.confirmCardPayment(clientSecret, {
+      payment_method: {
+        card: cardElement,
+        billing_details: {
+          name: `${form.firstName} ${form.lastName}`,
+          email: form.email,
+          address: {
+            line1: "123 Test Street",
+            city: "Mumbai",
+            state: "MH",
+            postal_code: "400001",
+            country: "IN"
+          }
+        }
+      }
+    });
+
+    if (result.error) {
+      throw new Error(result.error.message);
+    }
+
+    if (result.paymentIntent.status === "succeeded") {
+      await confirmPayment(pendingBooking.id, result.paymentIntent.id);
+      setConfirmedBooking(pendingBooking);
+      setPaymentStatus("PAID");
+      toast.success("Payment successful!");
+    } else {
+      throw new Error("Payment could not be completed.");
     }
   };
 
@@ -147,7 +221,7 @@ export default function Checkout() {
               </div>
               <div className="checkout-confirmation-row">
                 <span>Status</span>
-                <strong>Pending Confirmation</strong>
+                <strong>{paymentStatus === "PAID" ? "Paid" : "Pending Confirmation"}</strong>
               </div>
             </div>
 
@@ -176,64 +250,78 @@ export default function Checkout() {
 
         <div className="details-layout">
           <div className="checkout-form-card">
-            <h3>Contact Details</h3>
+            <h3>{showCardStep ? "Payment Details" : "Contact Details"}</h3>
 
-            {isAuthenticated && (
+            {!showCardStep && isAuthenticated && (
               <p className="checkout-logged-in-note">
                 Booking as <strong>{user?.email}</strong>. This booking will be linked to your account.
               </p>
             )}
 
-            <form onSubmit={handleSubmit}>
-              <div className="checkout-form-row">
-                <div className="checkout-field">
-                  <label>First Name</label>
-                  <input name="firstName" value={form.firstName} onChange={handleChange} required />
+            {showCardStep ? (
+              stripePromise && (
+                <Elements stripe={stripePromise}>
+                  <StripeCardForm
+                    amount={(destination.price * guests).toFixed(2)}
+                    onPaySuccess={handleStripePay}
+                    onBack={() => setShowCardStep(false)}
+                  />
+                </Elements>
+              )
+            ) : (
+              <form onSubmit={handleSubmit}>
+                <div className="checkout-form-row">
+                  <div className="checkout-field">
+                    <label>First Name</label>
+                    <input name="firstName" value={form.firstName} onChange={handleChange} required />
+                  </div>
+                  <div className="checkout-field">
+                    <label>Last Name</label>
+                    <input name="lastName" value={form.lastName} onChange={handleChange} required />
+                  </div>
                 </div>
+
                 <div className="checkout-field">
-                  <label>Last Name</label>
-                  <input name="lastName" value={form.lastName} onChange={handleChange} required />
+                  <label>Email Address</label>
+                  <input
+                    type="email"
+                    name="email"
+                    value={form.email}
+                    onChange={handleChange}
+                    disabled={isAuthenticated}
+                    required
+                  />
+                  {isAuthenticated && (
+                    <span className="checkout-field-hint">
+                      Locked to your account email. Not you? <Link to="/login">Switch account</Link>
+                    </span>
+                  )}
                 </div>
-              </div>
 
-              <div className="checkout-field">
-                <label>Email Address</label>
-                <input
-                  type="email"
-                  name="email"
-                  value={form.email}
-                  onChange={handleChange}
-                  disabled={isAuthenticated}
-                  required
-                />
-                {isAuthenticated && (
-                  <span className="checkout-field-hint">
-                    Locked to your account email. Not you? <Link to="/login">Switch account</Link>
-                  </span>
-                )}
-              </div>
+                <div className="checkout-field">
+                  <label>Phone Number</label>
+                  <input type="tel" name="phone" value={form.phone} onChange={handleChange} />
+                </div>
 
-              <div className="checkout-field">
-                <label>Phone Number</label>
-                <input type="tel" name="phone" value={form.phone} onChange={handleChange} />
-              </div>
+                <div className="checkout-field">
+                  <label>Payment Method</label>
+                  <select name="paymentMethod" value={form.paymentMethod} onChange={handleChange}>
+                    {stripeEnabled && <option>Credit Card</option>}
+                    <option>PayPal</option>
+                    <option>Bank Transfer</option>
+                  </select>
+                  <p className="checkout-payment-note">
+                    {form.paymentMethod === "Credit Card" && stripeEnabled
+                      ? "You'll enter your card details on the next step."
+                      : "This is a demo option — no real payment is processed. Your booking will be marked pending until confirmed by our team."}
+                  </p>
+                </div>
 
-              <div className="checkout-field">
-                <label>Payment Method</label>
-                <select name="paymentMethod" value={form.paymentMethod} onChange={handleChange}>
-                  <option>Credit Card</option>
-                  <option>PayPal</option>
-                  <option>Bank Transfer</option>
-                </select>
-                <p className="checkout-payment-note">
-                  This is a demo checkout — no real payment is processed. Your booking will be marked pending until confirmed by our team.
-                </p>
-              </div>
-
-              <button type="submit" className="checkout-submit-btn" disabled={submitting}>
-                {submitting ? "Processing..." : "Confirm & Book"}
-              </button>
-            </form>
+                <button type="submit" className="checkout-submit-btn" disabled={submitting}>
+                  {submitting ? "Processing..." : form.paymentMethod === "Credit Card" && stripeEnabled ? "Continue to Payment" : "Confirm & Book"}
+                </button>
+              </form>
+            )}
           </div>
 
           <aside className="checkout-summary-card">

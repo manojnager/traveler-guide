@@ -297,11 +297,14 @@ enum PaymentStatus {
 }
 
 model Payment {
-  id        Int           @id @default(autoincrement())
-  bookingId Int           @unique
-  amount    Decimal       @db.Decimal(10,2)
-  method    String
-  status    PaymentStatus @default(PENDING)
-  booking   Booking       @relation(fields: [bookingId], references: [id])
-  createdAt DateTime      @default(now())
+  id                    Int           @id @default(autoincrement())
+  bookingId             Int           @unique
+  amount                Decimal       @db.Decimal(10,2)
+  method                String
+  status                PaymentStatus @default(PENDING)
+  stripePaymentIntentId String?       @db.VarChar(255)
+  failureReason         String?       @db.VarChar(500)
+  booking               Booking       @relation(fields: [bookingId], references: [id])
+  createdAt             DateTime      @default(now())
+  updatedAt             DateTime      @default(now()) @updatedAt
 }

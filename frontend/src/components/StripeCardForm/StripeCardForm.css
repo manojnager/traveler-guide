@@ -1,0 +1,59 @@
+.stripe-card-secure-note {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 20px;
+  color: var(--text-light);
+  font-size: 13px;
+}
+
+.stripe-card-secure-note svg {
+  color: var(--primary);
+}
+
+.stripe-card-element-wrapper {
+  padding: 16px 18px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  margin-bottom: 8px;
+}
+
+.stripe-card-error {
+  color: #e5484d;
+  font-size: 13px;
+  margin: 10px 0 0;
+}
+
+.stripe-card-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.stripe-card-back-btn {
+  flex: 0 0 auto;
+  padding: 0 24px;
+  height: 58px;
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  color: var(--text-light);
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.stripe-card-back-btn:hover {
+  border-color: var(--primary);
+  color: var(--text);
+}
+
+.stripe-card-back-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.stripe-card-actions .checkout-submit-btn {
+  flex: 1;
+}

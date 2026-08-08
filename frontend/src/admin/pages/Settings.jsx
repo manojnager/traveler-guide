@@ -45,6 +45,12 @@ const DEFAULT_VALUES = {
     smtp_from_name: "",
     smtp_from_email: "",
     smtp_notify_email: ""
+  },
+  stripe: {
+    stripe_enabled: "false",
+    stripe_publishable_key: "",
+    stripe_secret_key: "",
+    stripe_secret_key_is_set: false
   }
 };
 
@@ -70,7 +76,8 @@ export default function Settings() {
           social: { ...DEFAULT_VALUES.social, ...data.social },
           seo: { ...DEFAULT_VALUES.seo, ...data.seo },
           booking: { ...DEFAULT_VALUES.booking, ...data.booking },
-          smtp: { ...DEFAULT_VALUES.smtp, ...data.smtp }
+          smtp: { ...DEFAULT_VALUES.smtp, ...data.smtp },
+          stripe: { ...DEFAULT_VALUES.stripe, ...data.stripe }
         });
       } catch {
         toast.error("Failed to load settings.");
@@ -202,6 +209,7 @@ export default function Settings() {
                   <textarea rows={4} className="form-control" {...register("booking.default_cancellation_policy")} />
                 </div>
               </Tab>
+
               <Tab eventKey="smtp" title="Email (SMTP)">
                 <div className="row g-3 mb-3">
                   <div className="col-md-8">
@@ -290,6 +298,50 @@ export default function Settings() {
                     </button>
                   </div>
                   <div className="form-hint">Save your SMTP settings first, then send a test to confirm they work.</div>
+                </div>
+              </Tab>
+
+              <Tab eventKey="stripe" title="Payments (Stripe)">
+                <div className="mb-3">
+                  <label className="form-check form-switch">
+                    <input
+                      className="form-check-input"
+                      type="checkbox"
+                      {...register("stripe.stripe_enabled", {
+                        setValueAs: (v) => (v ? "true" : "false")
+                      })}
+                    />
+                    <span className="form-check-label">Enable Stripe Payments</span>
+                  </label>
+                  <div className="form-hint">When disabled, card payment is hidden from checkout.</div>
+                </div>
+
+                <div className="row g-3">
+                  <div className="col-md-12">
+                    <label className="form-label">Publishable Key</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      placeholder="pk_test_..."
+                      {...register("stripe.stripe_publishable_key")}
+                    />
+                    <div className="form-hint">Safe to expose publicly — used by the checkout page.</div>
+                  </div>
+
+                  <div className="col-md-12">
+                    <label className="form-label">
+                      Secret Key {watch("stripe.stripe_secret_key_is_set") && (
+                        <span className="badge bg-green-lt text-green ms-1">Configured</span>
+                      )}
+                    </label>
+                    <input
+                      type="password"
+                      className="form-control"
+                      placeholder={watch("stripe.stripe_secret_key_is_set") ? "Leave blank to keep current" : "sk_test_..."}
+                      {...register("stripe.stripe_secret_key")}
+                    />
+                    <div className="form-hint">Never shown after saving. Used only on the backend to create charges.</div>
+                  </div>
                 </div>
               </Tab>
             </Tabs>
