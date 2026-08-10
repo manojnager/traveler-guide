@@ -14,6 +14,9 @@ import {
 import { isWishlisted, toggleWishlist } from "../../utils/wishlist";
 import BookingCalendar from "./BookingCalendar";
 
+import { useSettings } from "../../context/SettingsContext";
+import { formatPrice } from "../../utils/currency";
+
 import "./BookingCard.css";
 
 function BookingCard({ destination }) {
@@ -45,6 +48,7 @@ function BookingCard({ destination }) {
       nowSaved ? "Added to your wishlist." : "Removed from wishlist."
     );
   };
+  const { settings } = useSettings();
 
   return (
     <aside className="booking-card">
@@ -53,7 +57,7 @@ function BookingCard({ destination }) {
         Starting From
       </span>
 
-      <h2>${destination.price}</h2>
+      <h2>{formatPrice(destination.price, settings.currency)}</h2>
 
       <span className="booking-person">
         Per Person
@@ -130,7 +134,7 @@ function BookingCard({ destination }) {
         <span>Total</span>
 
         <strong>
-          ${destination.price * guests}
+          {formatPrice(destination.price * guests, settings.currency)}
         </strong>
 
       </div>

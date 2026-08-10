@@ -2,9 +2,12 @@ import { Link } from "react-router-dom";
 import { FaHeart, FaRegHeart, FaStar, FaClock, FaMapMarkerAlt, FaUserFriends } from "react-icons/fa";
 import { useState } from "react";
 import "./DestinationCard.css";
+import { useSettings } from "../../context/SettingsContext";
+import { formatPrice } from "../../utils/currency";
 
 function DestinationCard({ destination }) {
   const [favorite, setFavorite] = useState(false);
+  const { settings } = useSettings();
 
   return (
     <article className="destination-card">
@@ -62,7 +65,7 @@ function DestinationCard({ destination }) {
         <div className="destination-footer">
           <div className="destination-price-block">
             <span className="destination-price-label">From</span>
-            <span className="destination-price">${destination.price}</span>
+            <span className="destination-price">{formatPrice(destination.price, settings.currency)}</span>
           </div>
 
           <Link className="destination-btn" to={`/destinations/${destination.slug}`}>

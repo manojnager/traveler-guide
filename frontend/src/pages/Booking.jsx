@@ -5,11 +5,15 @@ import toast from "react-hot-toast";
 import { getPublicDestinations } from "../services/destinationService";
 import { mapDestination } from "../utils/destinationMapper";
 
+import { useSettings } from "../context/SettingsContext";
+import { formatPrice } from "../utils/currency";
+
 import "./Booking.css";
 
 function Booking() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
+  const { settings } = useSettings();
 
   const destinationId = searchParams.get("destinationId");
 
@@ -161,7 +165,7 @@ function Booking() {
 
             <div className="booking-price-row">
               <span>Price per person</span>
-              <strong>${destination.price}</strong>
+              <strong>{formatPrice(destination.price, settings.currency)}</strong>
             </div>
 
             <div className="booking-price-row">
@@ -171,7 +175,7 @@ function Booking() {
 
             <div className="booking-price-row booking-total-row">
               <span>Total</span>
-              <strong>${destination.price * guests}</strong>
+              <strong>{formatPrice(destination.price * guests, settings.currency)}</strong>
             </div>
 
             <button

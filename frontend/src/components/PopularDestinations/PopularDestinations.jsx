@@ -3,7 +3,7 @@ import "./PopularDestinations.css";
 
 export default function PopularDestinations({ destinations = [], loading }) {
   if (!loading && destinations.length === 0) return null;
-
+  
   return (
     <section className="destinations">
       <div className="container">

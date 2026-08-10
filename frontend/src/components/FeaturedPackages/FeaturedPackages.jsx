@@ -1,9 +1,11 @@
 import { Link } from "react-router-dom";
 import "./FeaturedPackages.css";
+import { useSettings } from "../../context/SettingsContext";
+import { formatPrice } from "../../utils/currency";
 
 export default function FeaturedPackages({ destinations = [], loading }) {
   if (!loading && destinations.length === 0) return null;
-
+  const { settings } = useSettings();
   return (
     <section className="featured-packages">
       <div className="container">
@@ -29,7 +31,7 @@ export default function FeaturedPackages({ destinations = [], loading }) {
                         e.target.src = "https://placehold.co/800x600/1a1d21/6c7a91?text=No+Image";
                       }}
                     />
-                    <span className="package-price">${destination.price}</span>
+                    <span className="package-price">{formatPrice(destination.price, settings.currency)}</span>
                   </div>
 
                   <div className="package-content">

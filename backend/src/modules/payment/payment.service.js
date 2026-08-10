@@ -17,27 +17,29 @@ export const createPaymentIntent = async (bookingId) => {
     where: { id: Number(bookingId) },
     include: { payment: true }
   });
-
   if (!booking) {
     throw new AppError("Booking not found.", 404);
   }
-
   if (booking.payment?.status === "PAID") {
     throw new AppError("This booking has already been paid.", 409);
   }
-
   const stripe = await getStripeClient();
-
+  const currencySetting = await prisma.setting.findUnique({ where: { key: "currency" } });
+  const currency = (currencySetting?.value || "USD").toLowerCase();
   const amountInCents = Math.round(Number(booking.totalAmount) * 100);
+  const destination = await prisma.destination.findUnique({
+    where: { id: booking.destinationId },
+    select: { title: true }
+  });
 
   const paymentIntent = await stripe.paymentIntents.create({
     amount: amountInCents,
-    currency: "usd",
-    description: `Booking payment for Booking #${booking.id} - Traveler Guide`,
+    currency,
+    description: `Booking #${booking.id} — ${destination?.title || "Travel booking"}`,
     metadata: {
       bookingId: String(booking.id)
     },
-    automatic_payment_methods: { enabled: true },
+    automatic_payment_methods: { enabled: true }
   });
 
   await prisma.payment.update({

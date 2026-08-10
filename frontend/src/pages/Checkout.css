@@ -249,3 +249,24 @@
 .checkout-field-hint a:hover {
   color: var(--primary-hover);
 }
+.checkout-cancellation-note {
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border);
+}
+
+.checkout-cancellation-note strong {
+  display: block;
+  color: var(--text);
+  font-size: 13px;
+  margin-bottom: 8px;
+}
+
+.checkout-cancellation-note p {
+  color: var(--text-light);
+  font-size: 12px;
+  line-height: 1.7;
+  white-space: pre-line;
+  max-height: 140px;
+  overflow-y: auto;
+}

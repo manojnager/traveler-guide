@@ -10,6 +10,9 @@ import DataTable from "../components/table/DataTable";
 import BookingStatusBadge from "../components/booking/BookingStatusBadge";
 import BookingDetailsModal from "../components/booking/BookingDetailsModal";
 
+import { useSettings } from "../../context/SettingsContext";
+import { formatPrice } from "../../utils/currency";
+
 import {
   getAdminBookings,
   updateBookingStatus,
@@ -153,7 +156,7 @@ export default function Bookings() {
     },
     {
       name: "Amount",
-      selector: (row) => `$${Number(row.totalAmount).toFixed(2)}`
+      selector: (row) => formatPrice(row.totalAmount, settings.currency)
     },
     {
       name: "Payment",
@@ -217,6 +220,7 @@ export default function Bookings() {
       )
     }
   ];
+  const { settings } = useSettings();
 
   return (
     <>

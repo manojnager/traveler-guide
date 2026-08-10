@@ -19,6 +19,7 @@ import blockedDateRoutes from "./modules/blockedDate/blockedDate.routes.js";
 import userRoutes from "./modules/user/user.routes.js";
 
 import paymentRoutes from "./modules/payment/payment.routes.js";
+import settingsRoutes from "./modules/settings/settings.routes.js";
 
 
 const app = express();
@@ -69,6 +70,7 @@ app.use("/api/admin", adminRoutes);
 app.use("/api/destinations", blockedDateRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/payments", paymentRoutes);
+app.use("/api/settings", settingsRoutes);
 
 app.get("/api/health", (req, res) => {
   res.json({

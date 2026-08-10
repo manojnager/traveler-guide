@@ -60,7 +60,7 @@ export default function StripeCardForm({ amount, onPaySuccess, onBack }) {
           Back
         </button>
         <button type="submit" className="checkout-submit-btn" disabled={!stripe || processing}>
-          {processing ? "Processing..." : `Pay $${amount}`}
+          {processing ? "Processing..." : `Pay ${amount}`}
         </button>
       </div>
     </form>

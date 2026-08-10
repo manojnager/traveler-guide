@@ -57,6 +57,23 @@ export const getAllSettings = async () => {
   }
   return grouped;
 };
+
+export const getPublicSettings = async () => {
+  const all = await getAllSettings();
+
+  return {
+    site_name: all.general?.site_name || "",
+    currency: all.booking?.currency || "USD",
+    default_cancellation_policy: all.booking?.default_cancellation_policy || "",
+    contact_email: all.general?.contact_email || "",
+    contact_phone: all.general?.contact_phone || "",
+    address: all.general?.address || "",
+    facebook_url: all.social?.facebook_url || "",
+    instagram_url: all.social?.instagram_url || "",
+    twitter_url: all.social?.twitter_url || ""
+  };
+};
+
 export const updateSettings = async (payload) => {
   const entries = [];
   Object.entries(payload).forEach(([group, fields]) => {

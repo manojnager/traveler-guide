@@ -1,5 +1,5 @@
 import { successResponse } from "../../responses/apiResponse.js";
-import { getAllSettings, updateSettings } from "./settings.service.js";
+import { getAllSettings, updateSettings, getPublicSettings } from "./settings.service.js";
 import { sendEmail } from "../../utils/mailer.js";
 import { wrapEmailTemplate } from "../../utils/emailTemplate.js";
 
@@ -16,6 +16,15 @@ export const update = async (req, res, next) => {
   try {
     const settings = await updateSettings(req.body);
     return successResponse(res, "Settings updated successfully.", settings);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const publicIndex = async (req, res, next) => {
+  try {
+    const settings = await getPublicSettings();
+    return successResponse(res, "Settings fetched successfully.", settings);
   } catch (error) {
     next(error);
   }
