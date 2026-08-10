@@ -156,6 +156,25 @@ export default function Bookings() {
       selector: (row) => `$${Number(row.totalAmount).toFixed(2)}`
     },
     {
+      name: "Payment",
+      cell: (row) => {
+        const paymentStatus = row.payment?.status || "PENDING";
+        const badgeClass =
+          paymentStatus === "PAID"
+            ? "bg-green-lt text-green"
+            : paymentStatus === "FAILED"
+            ? "bg-red-lt text-red"
+            : "bg-yellow-lt text-yellow";
+
+        return (
+          <span className={`badge ${badgeClass}`} title={row.payment?.method || ""}>
+            {paymentStatus}
+          </span>
+        );
+      },
+      width: "110px"
+    },
+    {
       name: "Status",
       cell: (row) => (
         <div style={{ minWidth: "150px" }}>

@@ -89,7 +89,8 @@ export const getAdminBookings = async (query) => {
         },
         destination: {
           select: { id: true, title: true, slug: true, thumbnail: true }
-        }
+        },
+        payment: true
       },
       orderBy,
       skip,
@@ -126,7 +127,8 @@ export const getMyBookings = async (userId, query) => {
       include: {
         destination: {
           select: { id: true, title: true, slug: true, thumbnail: true, duration: true }
-        }
+        },
+        payment: true
       },
       orderBy: { createdAt: "desc" },
       skip,
@@ -155,7 +157,8 @@ export const getBookingById = async (id) => {
       },
       destination: {
         select: { id: true, title: true, slug: true, thumbnail: true, price: true, duration: true }
-      }
+      },
+      payment: true
     }
   });
 

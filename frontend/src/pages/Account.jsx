@@ -260,9 +260,16 @@ function BookingsTab() {
               <div className="account-booking-info">
                 <div className="account-booking-top">
                   <h4>{booking.destination?.title}</h4>
-                  <span className={`account-status-badge ${STATUS_BADGE[booking.status]}`}>
-                    {booking.status}
-                  </span>
+                  <div className="account-booking-badges">
+                    <span className={`account-status-badge ${STATUS_BADGE[booking.status]}`}>
+                      {booking.status}
+                    </span>
+                    {booking.payment && (
+                      <span className={`account-payment-badge account-payment-${booking.payment.status.toLowerCase()}`}>
+                        {booking.payment.status === "PAID" ? "Paid" : booking.payment.status === "FAILED" ? "Payment Failed" : "Payment Pending"}
+                      </span>
+                    )}
+                  </div>
                 </div>
 
                 <div className="account-booking-meta">

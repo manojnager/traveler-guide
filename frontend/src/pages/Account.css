@@ -366,3 +366,34 @@
   opacity: 0.6;
   cursor: not-allowed;
 }
+
+.account-booking-badges {
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.account-payment-badge {
+  padding: 5px 14px;
+  border-radius: 30px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.account-payment-paid {
+  background: rgba(31, 157, 85, 0.15);
+  color: #1f9d55;
+}
+
+.account-payment-pending {
+  background: rgba(255, 193, 7, 0.15);
+  color: #ffc107;
+}
+
+.account-payment-failed {
+  background: rgba(214, 57, 57, 0.15);
+  color: #d63939;
+}

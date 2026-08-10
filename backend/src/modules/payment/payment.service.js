@@ -70,10 +70,18 @@ export const confirmPayment = async (bookingId, paymentIntentId) => {
   const paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId);
 
   if (paymentIntent.status === "succeeded") {
-    return prisma.payment.update({
-      where: { bookingId: Number(bookingId) },
-      data: { status: "PAID", failureReason: null }
-    });
+    const [updatedPayment] = await prisma.$transaction([
+      prisma.payment.update({
+        where: { bookingId: Number(bookingId) },
+        data: { status: "PAID", failureReason: null }
+      }),
+      prisma.booking.update({
+        where: { id: Number(bookingId) },
+        data: { status: "CONFIRMED" }
+      })
+    ]);
+
+    return updatedPayment;
   }
 
   const failureReason = paymentIntent.last_payment_error?.message || `Payment status: ${paymentIntent.status}`;
