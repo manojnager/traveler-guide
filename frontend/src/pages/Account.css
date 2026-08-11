@@ -323,9 +323,9 @@
 }
 
 .account-avatar-preview {
-  width: 80px;
-  height: 80px;
-  border-radius: 50%;
+  width: 280px;
+  height: 300px;
+  border-radius: 10px;
   background: var(--primary);
   color: #08111f;
   font-size: 26px;

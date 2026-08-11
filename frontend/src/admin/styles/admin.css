@@ -35,7 +35,10 @@
 .admin-sidebar {
   transition: transform 0.25s ease-in-out;
 }
-
+.avatar.avatar-lg.avtarinpopupimage {
+    width: 180px;
+    height: 200px;
+}
 .admin-sidebar-backdrop {
   position: fixed;
   inset: 0;

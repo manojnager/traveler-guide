@@ -127,7 +127,8 @@ export const updateUser = async (id, data, currentUserId) => {
     ...(data.email && { email: data.email }),
     ...(data.phone !== undefined && { phone: data.phone || null }),
     ...(data.roleId && { roleId: data.roleId }),
-    ...(data.status && { status: data.status })
+    ...(data.status && { status: data.status }),
+    ...(data.avatar !== undefined && { avatar: data.avatar || null })
   };
 
   if (data.password) {

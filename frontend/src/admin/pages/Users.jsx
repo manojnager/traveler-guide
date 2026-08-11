@@ -141,7 +141,7 @@ export default function Users() {
     ...roles.map((r) => ({ value: String(r.id), label: r.name }))
   ];
 
-  const AVATAR_COLORS = ["C8A96A", "6C7A91", "1F9D55", "D63939", "206BC4", "9C6ADE", "F59F00"];
+  const AVATAR_COLORS = ["C8A96A", "9A7A3D", "7A612F", "5F4A25", "3A3023", "292722", "40372A", "51432E"];
 
   const getFallbackAvatarUrl = (user) => {
     const name = `${user.firstName || ""} ${user.lastName || ""}`.trim() || "User";
