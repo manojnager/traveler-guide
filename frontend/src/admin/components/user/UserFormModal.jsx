@@ -111,7 +111,7 @@ export default function UserFormModal({ show, onClose, onSaved, user, saveFn, ro
   };
 
   return (
-    <Modal show={show} onHide={onClose} centered>
+    <Modal className="modalouterusers" show={show} onHide={onClose} centered>
       <Modal.Header closeButton>
         <Modal.Title>{user ? "Edit User" : "Add User"}</Modal.Title>
       </Modal.Header>
@@ -180,7 +180,7 @@ export default function UserFormModal({ show, onClose, onSaved, user, saveFn, ro
               {errors.lastName && <div className="invalid-feedback">{errors.lastName.message}</div>}
             </div>
 
-            <div className="col-md-12">
+            <div className="col-md-6">
               <label className="form-label">Email</label>
               <input
                 type="email"
@@ -190,7 +190,7 @@ export default function UserFormModal({ show, onClose, onSaved, user, saveFn, ro
               {errors.email && <div className="invalid-feedback">{errors.email.message}</div>}
             </div>
 
-            <div className="col-md-12">
+            <div className="col-md-6">
               <label className="form-label">
                 Password {user && <span className="text-secondary">(leave blank to keep current)</span>}
               </label>

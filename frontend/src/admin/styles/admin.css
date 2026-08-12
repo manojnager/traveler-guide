@@ -36,8 +36,8 @@
   transition: transform 0.25s ease-in-out;
 }
 .avatar.avatar-lg.avtarinpopupimage {
-    width: 180px;
-    height: 200px;
+    width: 250px;
+    height: 250px;
 }
 .admin-sidebar-backdrop {
   position: fixed;
@@ -155,7 +155,9 @@ li.breadcrumb-item.active, h2.page-title.mt-1 {
   border-color: var(--tblr-border-color, #2d3339) !important;
   min-height: 38px !important;
 }
-
+.rdt_pagination button {
+    color: #fff;
+}
 .react-select__control:hover {
   border-color: var(--tblr-border-color-translucent, #3a4149) !important;
 }
