@@ -1,14 +1,16 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import toast from "react-hot-toast";
 import { format } from "date-fns";
-import { FaUser, FaLock, FaSuitcaseRolling, FaCamera } from "react-icons/fa";
+import { FaUser, FaLock, FaSuitcaseRolling, FaCamera, FaStar } from "react-icons/fa";
 
 import { useAuth } from "../context/AuthContext";
 import { updateProfile, changePassword } from "../services/userService";
 import { getMyBookings } from "../services/bookingService";
+import { getMyReviewableBookings } from "../services/reviewService";
 import { uploadAvatar } from "../services/avatarUploadService";
 import { getImageUrl } from "../utils/image";
+import ReviewFormModal from "../components/ReviewFormModal/ReviewFormModal";
 
 import "./Account.css";
 
@@ -257,7 +259,7 @@ function BookingsTab() {
                 }}
               />
 
-              <div className="account-booking-info">
+              <div className="account-booking-info ch1">
                 <div className="account-booking-top">
                   <h4>{booking.destination?.title}</h4>
                   <div className="account-booking-badges">
@@ -293,6 +295,99 @@ function BookingsTab() {
   );
 }
 
+function ReviewsTab() {
+  const [reviewableBookings, setReviewableBookings] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [activeReviewBooking, setActiveReviewBooking] = useState(null);
+
+  const fetchReviewable = useCallback(async () => {
+    setLoading(true);
+
+    try {
+      const data = await getMyReviewableBookings();
+      setReviewableBookings(data);
+    } catch {
+      toast.error("Failed to load reviewable trips.");
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchReviewable();
+  }, [fetchReviewable]);
+
+  const handleSubmitted = () => {
+    setActiveReviewBooking(null);
+    fetchReviewable();
+  };
+
+  if (loading) {
+    return <div className="account-panel"><p className="account-panel-sub">Loading...</p></div>;
+  }
+
+  return (
+    <div className="account-panel">
+      <h3>Write a Review</h3>
+      <p className="account-panel-sub">Share your experience from trips you've completed.</p>
+
+      {reviewableBookings.length === 0 ? (
+        <div className="account-empty-state">
+          <FaStar />
+          <p>No trips are ready to review yet. Reviews unlock after your travel date has passed.</p>
+          <Link to="/destinations" className="account-submit-btn account-empty-link">Browse Destinations</Link>
+        </div>
+      ) : (
+        <div className="account-bookings-list">
+          {reviewableBookings.map((booking) => (
+            <div className="account-booking-card" key={booking.id}>
+              <img
+                src={getImageUrl(booking.destination?.thumbnail)}
+                alt={booking.destination?.title}
+                onError={(e) => {
+                  e.target.onerror = null;
+                  e.target.src = "https://placehold.co/200x200/162235/B6C2D2?text=No+Image";
+                }}
+              />
+
+              <div className="account-booking-info reviewbtninfo">
+                <div className="leftpartrvs">
+                  <div className="account-booking-top">
+                    <h4>{booking.destination?.title}</h4>
+                  </div>
+                
+                  <div className="account-booking-meta">
+                    <span>Booking #{booking.id}</span>
+                    <span>Traveled {format(new Date(booking.travelDate), "MMM dd, yyyy")}</span>
+                  </div>
+                </div>
+                <div className="rightpartrvs">
+                  <button
+                    type="button"
+                    className="account-submit-btn account-empty-link"
+                    style={{ marginTop: "10px" }}
+                    onClick={() => setActiveReviewBooking(booking)}
+                  >
+                    Write a Review
+                  </button>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {activeReviewBooking && (
+        <ReviewFormModal
+          booking={activeReviewBooking}
+          onClose={() => setActiveReviewBooking(null)}
+          onSubmitted={handleSubmitted}
+        />
+      )}
+    </div>
+  );
+}
+
 function Account() {
   const { user } = useAuth();
   const [activeTab, setActiveTab] = useState("profile");
@@ -300,6 +395,7 @@ function Account() {
   const TABS = [
     { key: "profile", label: "Profile", icon: <FaUser /> },
     { key: "bookings", label: "My Bookings", icon: <FaSuitcaseRolling /> },
+    { key: "reviews", label: "Reviews", icon: <FaStar /> },
     { key: "password", label: "Password", icon: <FaLock /> }
   ];
 
@@ -338,6 +434,7 @@ function Account() {
           <div className="account-content">
             {activeTab === "profile" && <ProfileTab />}
             {activeTab === "bookings" && <BookingsTab />}
+            {activeTab === "reviews" && <ReviewsTab />}
             {activeTab === "password" && <PasswordTab />}
           </div>
         </div>

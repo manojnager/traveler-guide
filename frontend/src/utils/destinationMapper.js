@@ -33,7 +33,8 @@ export const mapDestination = (destination) => {
       id: r.id,
       name: `${r.user?.firstName || "Anonymous"} ${r.user?.lastName || ""}`.trim(),
       rating: Number(r.rating),
-      review: r.review
+      review: r.review,
+      avatar: r.user?.avatar || null
     })) || []
   };
 };

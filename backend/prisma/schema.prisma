@@ -179,13 +179,14 @@ model Review {
   id            Int         @id @default(autoincrement())
   destinationId Int
   userId        Int
+  bookingId     Int?        @unique
   rating        Decimal     @db.Decimal(2,1)
   review        String      @db.LongText
   isHidden      Boolean     @default(false)
   createdAt     DateTime    @default(now())
   destination   Destination @relation(fields: [destinationId], references: [id])
   user          User        @relation(fields: [userId], references: [id])
-
+  booking       Booking?    @relation(fields: [bookingId], references: [id])
   @@index([destinationId])
   @@index([userId])
 }
@@ -226,9 +227,11 @@ model Booking {
   contactFirstName String?    @db.VarChar(100)
   contactLastName  String?    @db.VarChar(100)
   contactPhone     String?    @db.VarChar(20)
+
   user          User          @relation(fields: [userId], references: [id])
   destination   Destination   @relation(fields: [destinationId], references: [id])
   payment       Payment?
+  review        Review?
   createdAt     DateTime      @default(now())
   updatedAt     DateTime      @updatedAt
 
@@ -307,4 +310,23 @@ model Payment {
   booking               Booking       @relation(fields: [bookingId], references: [id])
   createdAt             DateTime      @default(now())
   updatedAt             DateTime      @default(now()) @updatedAt
+}
+
+model Post {
+  id          Int      @id @default(autoincrement())
+  title       String
+  slug        String   @unique
+  excerpt     String   @db.Text
+  content     String   @db.LongText
+  image       String?
+  category    String
+  readTime    String
+  isPublished Boolean  @default(true)
+  isFeatured  Boolean  @default(false)
+  publishedAt DateTime @default(now())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([category])
+  @@index([isPublished])
 }

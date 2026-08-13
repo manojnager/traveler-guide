@@ -20,9 +20,10 @@ import userRoutes from "./modules/user/user.routes.js";
 
 import paymentRoutes from "./modules/payment/payment.routes.js";
 import settingsRoutes from "./modules/settings/settings.routes.js";
-
+import reviewRoutes from "./modules/review/review.routes.js";
 
 const app = express();
+//const postRoutes = require("./src/routes/postRoutes");
 
 app.use(
   cors({
@@ -71,6 +72,8 @@ app.use("/api/destinations", blockedDateRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/payments", paymentRoutes);
 app.use("/api/settings", settingsRoutes);
+app.use("/api/reviews", reviewRoutes);
+//app.use("/api/posts", postRoutes);
 
 app.get("/api/health", (req, res) => {
   res.json({
