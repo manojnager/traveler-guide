@@ -1,66 +1,44 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FaCalendarAlt, FaClock } from "react-icons/fa";
+import { Link } from "react-router-dom";
+import { format } from "date-fns";
+import toast from "react-hot-toast";
+
+import { getBlogPosts, getBlogCategories } from "../services/blogPostService";
+import { getImageUrl } from "../utils/image";
 
 import "./TravelJournal.css";
 
-const ARTICLES = [
-  {
-    category: "Guides",
-    title: "The Ultimate Guide to Traveling Santorini Off-Season",
-    excerpt: "Skip the crowds and discover why late autumn might be the best-kept secret for experiencing the Greek islands.",
-    image: "https://images.unsplash.com/photo-1533105079780-92b9be482077?w=900&q=80",
-    date: "June 12, 2026",
-    readTime: "6 min read"
-  },
-  {
-    category: "Inspiration",
-    title: "10 Destinations That Redefine Luxury Travel in 2026",
-    excerpt: "From private overwater villas to heli-accessible mountain lodges — here's where the world's most discerning travelers are heading next.",
-    image: "https://images.unsplash.com/photo-1544644181-1484b3fdfc62?w=900&q=80",
-    date: "May 28, 2026",
-    readTime: "8 min read"
-  },
-  {
-    category: "Tips",
-    title: "Packing Like a Pro: A Minimalist's Guide to Luxury Travel",
-    excerpt: "Travel lighter without sacrificing style. Our travel designers share their go-to packing strategies for every climate.",
-    image: "https://images.unsplash.com/photo-1553440569-bcc63803a83d?w=900&q=80",
-    date: "May 15, 2026",
-    readTime: "5 min read"
-  },
-  {
-    category: "Culture",
-    title: "A Culinary Journey Through Kyoto's Hidden Kitchens",
-    excerpt: "Beyond the temples and gardens lies a food culture centuries in the making. Here's where to eat like a local.",
-    image: "https://images.unsplash.com/photo-1493997181344-712f2f19d87a?w=900&q=80",
-    date: "April 30, 2026",
-    readTime: "7 min read"
-  },
-  {
-    category: "Guides",
-    title: "First-Time Safari: What to Expect and How to Prepare",
-    excerpt: "Everything from what to pack to the best time of year to spot the Big Five on your first African safari.",
-    image: "https://images.unsplash.com/photo-1516426122078-c23e76319801?w=900&q=80",
-    date: "April 18, 2026",
-    readTime: "9 min read"
-  },
-  {
-    category: "Inspiration",
-    title: "Why Slow Travel Is the Trend Worth Following",
-    excerpt: "Fewer destinations, deeper experiences. We explore why more travelers are choosing quality over quantity.",
-    image: "https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=900&q=80",
-    date: "April 3, 2026",
-    readTime: "4 min read"
-  }
-];
-
-const CATEGORIES = ["All", "Guides", "Inspiration", "Tips", "Culture"];
-
 function TravelJournal() {
+  const [categories, setCategories] = useState(["All"]);
   const [activeCategory, setActiveCategory] = useState("All");
+  const [posts, setPosts] = useState([]);
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [loading, setLoading] = useState(true);
 
-  const filteredArticles =
-    activeCategory === "All" ? ARTICLES : ARTICLES.filter((a) => a.category === activeCategory);
+  useEffect(() => {
+    getBlogCategories()
+      .then((data) => setCategories(["All", ...data]))
+      .catch(() => setCategories(["All"]));
+  }, []);
+
+  useEffect(() => {
+    setLoading(true);
+
+    getBlogPosts({ page, limit: 9, category: activeCategory })
+      .then((data) => {
+        setPosts(data.items);
+        setTotalPages(data.totalPages);
+      })
+      .catch(() => toast.error("Failed to load journal posts."))
+      .finally(() => setLoading(false));
+  }, [page, activeCategory]);
+
+  const handleCategoryChange = (cat) => {
+    setActiveCategory(cat);
+    setPage(1);
+  };
 
   return (
     <main className="journal-page">
@@ -78,39 +56,84 @@ function TravelJournal() {
 
       <section className="section journal-content">
         <div className="container">
+
           <div className="journal-filters">
-            {CATEGORIES.map((cat) => (
+            {categories.map((cat) => (
               <button
                 key={cat}
                 type="button"
                 className={`journal-filter-chip ${activeCategory === cat ? "is-active" : ""}`}
-                onClick={() => setActiveCategory(cat)}
+                onClick={() => handleCategoryChange(cat)}
               >
                 {cat}
               </button>
             ))}
           </div>
 
-          <div className="journal-grid">
-            {filteredArticles.map((article) => (
-              <article className="journal-card" key={article.title}>
-                <div className="journal-card-image">
-                  <img src={article.image} alt={article.title} />
-                  <span className="journal-card-category">{article.category}</span>
-                </div>
+          {loading ? (
+            <div className="journal-loading">
+              {Array.from({ length: 6 }).map((_, i) => (
+                <div className="journal-skeleton" key={i} />
+              ))}
+            </div>
+          ) : posts.length === 0 ? (
+            <div className="journal-empty">
+              <p>No articles found in this category yet.</p>
+            </div>
+          ) : (
+            <>
+              <div className="journal-grid">
+                {posts.map((article) => (
+                  <Link to={`/travel-journal/${article.slug}`} className="journal-card" key={article.id}>
+                    <div className="journal-card-image">
+                      <img
+                        src={getImageUrl(article.coverImage)}
+                        alt={article.title}
+                        onError={(e) => {
+                          e.target.onerror = null;
+                          e.target.src = "https://placehold.co/600x400/121c2b/C8A96A?text=Traveler+Guide";
+                        }}
+                      />
+                      <span className="journal-card-category">{article.category}</span>
+                    </div>
 
-                <div className="journal-card-body">
-                  <h3>{article.title}</h3>
-                  <p>{article.excerpt}</p>
+                    <div className="journal-card-body">
+                      <h3>{article.title}</h3>
+                      <p>{article.excerpt}</p>
 
-                  <div className="journal-card-meta">
-                    <span><FaCalendarAlt /> {article.date}</span>
-                    <span><FaClock /> {article.readTime}</span>
-                  </div>
+                      <div className="journal-card-meta">
+                        <span><FaCalendarAlt /> {format(new Date(article.publishedAt), "MMM dd, yyyy")}</span>
+                        <span><FaClock /> {article.readTime}</span>
+                      </div>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+
+              {totalPages > 1 && (
+                <div className="journal-pagination">
+                  <button
+                    type="button"
+                    disabled={page === 1}
+                    onClick={() => setPage((p) => p - 1)}
+                  >
+                    Previous
+                  </button>
+
+                  <span>Page {page} of {totalPages}</span>
+
+                  <button
+                    type="button"
+                    disabled={page === totalPages}
+                    onClick={() => setPage((p) => p + 1)}
+                  >
+                    Next
+                  </button>
                 </div>
-              </article>
-            ))}
-          </div>
+              )}
+            </>
+          )}
+
         </div>
       </section>
     </main>

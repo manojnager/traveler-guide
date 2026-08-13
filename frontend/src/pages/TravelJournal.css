@@ -43,19 +43,20 @@
 .journal-filters {
   display: flex;
   flex-wrap: wrap;
-  gap: 12px;
+  gap: 8px;
   margin-bottom: 50px;
 }
 
 .journal-filter-chip {
-  padding: 10px 24px;
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 30px;
-  color: var(--text-light);
-  font-size: 13px;
-  cursor: pointer;
-  transition: var(--transition);
+    padding: 5px 12px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    color: #fff;
+    font-size: 16px;
+    transition: var(--transition);
+    font-family: "Cormorant Garamond", serif;
+    font-weight: bold;
 }
 
 .journal-filter-chip:hover {
@@ -86,8 +87,10 @@
 }
 
 .journal-card:hover {
-  transform: translateY(-6px);
-  border-color: rgba(200, 169, 106, 0.3);
+    transform: translateY(-6px);
+    border-color: rgba(200, 169, 106, 0.3);
+    text-decoration: none;
+    cursor: pointer;
 }
 
 .journal-card-image {
@@ -166,5 +169,80 @@
 
   .journal-hero h1 {
     font-size: 32px;
+  }
+}
+.journal-loading {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+}
+
+.journal-skeleton {
+  height: 360px;
+  border-radius: var(--radius);
+  background: linear-gradient(90deg, var(--card) 25%, var(--surface) 50%, var(--card) 75%);
+  background-size: 200% 100%;
+  animation: journal-shimmer 1.4s ease-in-out infinite;
+}
+
+@keyframes journal-shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+.journal-empty {
+  text-align: center;
+  padding: 80px 20px;
+  color: var(--text-light);
+}
+
+.journal-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  margin-top: 50px;
+}
+
+.journal-pagination button {
+  padding: 12px 26px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  color: var(--text);
+  font-size: 13px;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.journal-pagination button:hover:not(:disabled) {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+.journal-pagination button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.journal-pagination span {
+  color: var(--text-light);
+  font-size: 13px;
+}
+.journal-card {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+
+@media (max-width: 900px) {
+  .journal-loading {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .journal-loading {
+    grid-template-columns: 1fr;
   }
 }

@@ -19,6 +19,7 @@ const ROUTES = {
   FORGOT_PASSWORD: "/forgot-password",
   RESET_PASSWORD: "/reset-password",
   ACCOUNT: "/account",
+  BLOG_POST_DETAIL: "/travel-journal/:slug",
 };
 
 export default ROUTES;

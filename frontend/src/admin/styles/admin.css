@@ -231,3 +231,20 @@ li.breadcrumb-item.active, h2.page-title.mt-1 {
     position: relative;
     top: -5px;
 }
+.ql-toolbar.ql-snow {
+  border-color: var(--tblr-border-color, #e6e7e9);
+  border-radius: 8px 8px 0 0;
+  background: var(--tblr-bg-surface, #fff);
+}
+
+.ql-container.ql-snow {
+  border-color: var(--tblr-border-color, #e6e7e9);
+  border-radius: 0 0 8px 8px;
+  min-height: 280px;
+  font-size: 15px;
+  font-family: inherit;
+}
+
+.ql-editor {
+  min-height: 280px;
+}

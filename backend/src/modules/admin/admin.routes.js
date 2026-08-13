@@ -93,6 +93,14 @@ import {
   destroy as blockedDateDestroy
 } from "../blockedDate/blockedDate.controller.js";
 
+import {
+  adminIndex as blogAdminIndex,
+  adminShow as blogAdminShow,
+  store as blogStore,
+  update as blogUpdate,
+  destroy as blogDestroy
+} from "../blog/blog.controller.js";
+
 const router = Router();
 
 router.use(auth);
@@ -167,5 +175,11 @@ router.get("/destinations/:destinationId/blocked-dates", blockedDateAdminIndex);
 router.post("/destinations/:destinationId/blocked-dates", blockedDateStore);
 router.post("/destinations/:destinationId/blocked-dates/bulk", blockedDateStoreBulk);
 router.delete("/blocked-dates/:id", blockedDateDestroy);
+
+router.get("/blog", blogAdminIndex);
+router.get("/blog/:id", blogAdminShow);
+router.post("/blog", blogStore);
+router.patch("/blog/:id", blogUpdate);
+router.delete("/blog/:id", blogDestroy);
 
 export default router;

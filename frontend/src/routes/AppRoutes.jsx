@@ -24,6 +24,7 @@ import Terms from "../pages/Terms";
 import ForgotPassword from "../pages/ForgotPassword";
 import ResetPassword from "../pages/ResetPassword";
 import ProtectedRoute from "../components/ProtectedRoute/ProtectedRoute";
+import BlogPostDetail from "../pages/BlogPostDetail";
 
 function AppRoutes() {
   return (
@@ -34,6 +35,7 @@ function AppRoutes() {
         <Route path={ROUTES.CONTACT} element={<Contact />} />
         <Route path={ROUTES.EXPERIENCES} element={<Experiences />} />
         <Route path={ROUTES.TRAVEL_JOURNAL} element={<TravelJournal />} />
+        <Route path={ROUTES.BLOG_POST_DETAIL} element={<BlogPostDetail />} />
         <Route path={ROUTES.GALLERY} element={<Gallery />} />
         <Route path={ROUTES.HELP_CENTER} element={<HelpCenter />} />
         <Route path={ROUTES.FAQS} element={<FAQs />} />

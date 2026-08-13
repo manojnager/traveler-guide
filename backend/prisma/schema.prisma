@@ -41,6 +41,7 @@ model User {
   reviews    Review[]
   wishlists  Wishlist[]
   bookings   Booking[]
+  blogPosts  BlogPost[]
   createdAt  DateTime   @default(now())
   updatedAt  DateTime   @updatedAt
 
@@ -312,21 +313,27 @@ model Payment {
   updatedAt             DateTime      @default(now()) @updatedAt
 }
 
-model Post {
-  id          Int      @id @default(autoincrement())
-  title       String
-  slug        String   @unique
-  excerpt     String   @db.Text
-  content     String   @db.LongText
-  image       String?
-  category    String
-  readTime    String
-  isPublished Boolean  @default(true)
-  isFeatured  Boolean  @default(false)
-  publishedAt DateTime @default(now())
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+enum BlogPostStatus {
+  DRAFT
+  PUBLISHED
+}
 
+model BlogPost {
+  id          Int            @id @default(autoincrement())
+  title       String         @db.VarChar(255)
+  slug        String         @unique @db.VarChar(255)
+  excerpt     String         @db.VarChar(500)
+  content     String         @db.LongText
+  coverImage  String?        @db.VarChar(255)
+  category    String         @db.VarChar(50)
+  status      BlogPostStatus @default(DRAFT)
+  authorId    Int
+  publishedAt DateTime?
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+
+  author      User           @relation(fields: [authorId], references: [id])
+
+  @@index([status])
   @@index([category])
-  @@index([isPublished])
 }

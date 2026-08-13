@@ -22,6 +22,10 @@ import Settings from "../pages/Settings";
 import ContactMessages from "../pages/ContactMessages";
 import EmailLogs from "../pages/EmailLogs";
 
+import BlogPosts from "../pages/BlogPosts";
+import CreateBlogPost from "../pages/CreateBlogPost";
+import EditBlogPost from "../pages/EditBlogPost";
+
 import "../styles/admin.css";
 
 function AdminRoutes() {
@@ -47,6 +51,9 @@ function AdminRoutes() {
               <Route path="settings" element={<Settings />} />
               <Route path="contact-messages" element={<ContactMessages />} />
               <Route path="email-logs" element={<EmailLogs />} />
+              <Route path="blog" element={<BlogPosts />} />
+              <Route path="blog/create" element={<CreateBlogPost />} />
+              <Route path="blog/:id/edit" element={<EditBlogPost />} />
             </Route>
             <Route path="*" element={<Navigate to="/admin" replace />} />
           </Routes>
