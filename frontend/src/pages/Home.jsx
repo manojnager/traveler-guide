@@ -5,10 +5,14 @@ import PopularDestinations from "../components/PopularDestinations/PopularDestin
 import FeaturedPackages from "../components/FeaturedPackages/FeaturedPackages";
 import WhyChooseUs from "../components/WhyChooseUs/WhyChooseUs";
 import Testimonials from "../components/Testimonials/Testimonials";
-import Newsletter from "../components/Newsletter/Newsletter";
+import LatestJournal from "../components/LatestJournal/LatestJournal"; 
+import Newsletter from "../components/Newsletter/Newsletter"; 
 
 import { getPublicDestinations } from "../services/destinationService";
 import { mapDestination } from "../utils/destinationMapper";
+
+import { getLatestBlogPosts } from "../services/blogPostService";
+import { getImageUrl } from "../utils/image";
 
 export default function Home() {
   const [destinations, setDestinations] = useState([]);
@@ -44,6 +48,7 @@ export default function Home() {
       <FeaturedPackages destinations={topRatedDestinations} loading={loading} />
       <WhyChooseUs />
       <Testimonials />
+      <LatestJournal />
       <Newsletter />
     </>
   );

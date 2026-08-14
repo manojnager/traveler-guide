@@ -85,3 +85,12 @@ export const publicShow = async (req, res, next) => {
     next(error);
   }
 };
+
+export const publicLatest = async (req, res, next) => {
+  try {
+    const posts = await getLatestBlogPosts(req.query.limit);
+    return successResponse(res, "Latest posts fetched successfully.", posts);
+  } catch (error) {
+    next(error);
+  }
+};

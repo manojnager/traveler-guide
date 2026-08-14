@@ -9,6 +9,11 @@ function DestinationCard({ destination }) {
   const [favorite, setFavorite] = useState(false);
   const { settings } = useSettings();
 
+  const reviewCount = destination.reviews?.length || 0;
+  const avgRating = reviewCount
+    ? (destination.reviews.reduce((sum, r) => sum + r.rating, 0) / reviewCount).toFixed(1)
+    : destination.rating;
+
   return (
     <article className="destination-card">
       <div className="destination-image">
@@ -34,7 +39,9 @@ function DestinationCard({ destination }) {
         </button>
 
         <span className="destination-rating-badge">
-          <FaStar /> {destination.rating}
+          <FaStar />
+          {avgRating}
+          {reviewCount > 0 && <em>({reviewCount} Reviews)</em>}
         </span>
 
         <div className="destination-image-location">

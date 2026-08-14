@@ -93,7 +93,15 @@ export const getDestinations = async () => {
       category: true,
       country: true,
       city: true,
-      images: true
+      images: true,
+      reviews: {
+        where: {
+          isHidden: false
+        },
+        select: {
+          rating: true
+        }
+      }
     },
     orderBy: [
       {

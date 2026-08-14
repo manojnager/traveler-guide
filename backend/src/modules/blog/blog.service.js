@@ -189,6 +189,17 @@ export const getPublicBlogCategories = async () => {
   return categories.map((c) => c.category).sort();
 };
 
+export const getLatestBlogPosts = async (limit = 3) => {
+  const posts = await prisma.blogPost.findMany({
+    where: { status: "PUBLISHED" },
+    select: postSelect,
+    orderBy: { publishedAt: "desc" },
+    take: Number(limit)
+  });
+
+  return posts.map(withReadTime);
+};
+
 export const getPublicBlogPostBySlug = async (slug) => {
   const post = await prisma.blogPost.findFirst({
     where: { slug, status: "PUBLISHED" },
@@ -199,5 +210,19 @@ export const getPublicBlogPostBySlug = async (slug) => {
     throw new AppError("Post not found.", 404);
   }
 
-  return withReadTime(post);
+  const relatedPosts = await prisma.blogPost.findMany({
+    where: {
+      status: "PUBLISHED",
+      category: post.category,
+      id: { not: post.id }
+    },
+    select: postSelect,
+    orderBy: { publishedAt: "desc" },
+    take: 3
+  });
+
+  return {
+    ...withReadTime(post),
+    relatedPosts: relatedPosts.map(withReadTime)
+  };
 };

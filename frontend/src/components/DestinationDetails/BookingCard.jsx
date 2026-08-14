@@ -26,6 +26,10 @@ function BookingCard({ destination }) {
   const [travelDate, setTravelDate] = useState("");
   const [saved, setSaved] = useState(isWishlisted(destination.slug));
 
+  const avgRating = destination.reviews.length
+  ? (destination.reviews.reduce((sum, r) => sum + r.rating, 0) / destination.reviews.length).toFixed(1)
+  : 0;
+
   const handleReserve = () => {
     if (!travelDate) {
       toast.error("Please select a travel date.");
@@ -65,9 +69,8 @@ function BookingCard({ destination }) {
 
       <div className="booking-rating">
         <FaStar />
-
         <span>
-          {destination.rating} / 5 Rating
+          {destination.reviews?.length ? avgRating : destination.rating} / 5 Rating
         </span>
       </div>
 

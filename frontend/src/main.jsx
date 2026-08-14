@@ -14,15 +14,19 @@ import ScrollToTop from "./ScrollToTop";
 import { AuthProvider } from "./context/AuthContext";
 import { SettingsProvider } from "./context/SettingsContext";
 
+import { HelmetProvider } from "react-helmet-async";
+
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <BrowserRouter>
       <ScrollToTop />
-      <SettingsProvider>
-        <AuthProvider>
-          <App />
-        </AuthProvider>
-      </SettingsProvider>
+      <HelmetProvider>
+        <SettingsProvider>
+          <AuthProvider>
+            <App />
+          </AuthProvider>
+        </SettingsProvider>
+      </HelmetProvider>
       <Toaster position="top-right" />
     </BrowserRouter>
   </React.StrictMode>

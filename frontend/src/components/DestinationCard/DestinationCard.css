@@ -87,7 +87,7 @@
   display: flex;
   align-items: center;
   gap: 6px;
-  padding: 6px 12px;
+  padding: 6px 12px !important;
   background: rgba(8, 17, 31, 0.75);
   backdrop-filter: blur(6px);
   border: 1px solid rgba(255, 255, 255, 0.12);
@@ -133,6 +133,12 @@
   font-family: "Cormorant Garamond", serif;
   line-height: 1.2;
   color: var(--text);
+}
+.destination-rating-badge {gap:5px;}
+.destination-rating-badge em {font-style:normal;opacity:0.75;font-size:11px;margin-left:1px; position: relative; top: 2px;}
+
+.destination-rating-badge svg {
+    position: relative;
 }
 
 .destination-description {

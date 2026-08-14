@@ -1,4 +1,5 @@
-import { FaStar, FaQuoteLeft } from "react-icons/fa";
+import { FaQuoteLeft } from "react-icons/fa";
+import { FaStar, FaRegStar } from "react-icons/fa6";
 import { getImageUrl } from "../../utils/image";
 import "./Reviews.css";
 
@@ -12,6 +13,10 @@ function Reviews({ destination }) {
     );
   }
 
+  const avgRating = destination.reviews.length
+  ? (destination.reviews.reduce((sum, r) => sum + r.rating, 0) / destination.reviews.length).toFixed(1)
+  : 0;
+
   return (
     <section className="reviews-section">
 
@@ -22,21 +27,22 @@ function Reviews({ destination }) {
         <div className="reviews-summary">
 
           <div className="reviews-score">
-            {destination.rating}
+            {avgRating}
           </div>
 
           <div>
 
             <div className="reviews-stars">
-              <FaStar />
-              <FaStar />
-              <FaStar />
-              <FaStar />
-              <FaStar />
+              {[1, 2, 3, 4, 5].map((star) =>
+                star <= Math.round(avgRating) ? (
+                  <FaStar key={star} />
+                ) : (
+                  <FaRegStar key={star} />
+                )
+              )}
             </div>
-
             <p>
-              Based on {destination.reviews.length} verified reviews
+              Average rating: {avgRating} based on {destination.reviews.length} verified reviews
             </p>
 
           </div>
