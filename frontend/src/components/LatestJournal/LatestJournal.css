@@ -105,6 +105,9 @@
     color: #c58400;
     font-weight: 500;
 }
+a.latest-journal-card:hover {
+    text-decoration: none;
+}
 
 @media (max-width: 900px) {
   .latest-journal-grid {
