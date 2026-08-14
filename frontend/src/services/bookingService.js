@@ -4,3 +4,8 @@ export const createBooking = async (payload) => {
   const response = await api.post("/bookings", payload);
   return response.data.data;
 };
+
+export const getMyBookings = async (params) => {
+  const response = await api.get("/bookings/my", { params });
+  return response.data.data;
+};

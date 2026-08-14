@@ -128,9 +128,9 @@
 }
 
 .destination-content h3 {
-  font-size: 24px;
+  font-size: 26px;
   margin-bottom: 10px;
-  font-family: var(--font-heading);
+  font-family: "Cormorant Garamond", serif;
   line-height: 1.2;
   color: var(--text);
 }

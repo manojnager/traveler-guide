@@ -3,6 +3,9 @@ import { Link } from "react-router-dom";
 
 import { getPublicDestinations } from "../services/destinationService";
 import { mapDestination } from "../utils/destinationMapper";
+import { useSettings } from "../context/SettingsContext";
+import { formatPrice } from "../utils/currency";
+
 
 import "./Packages.css";
 
@@ -11,6 +14,7 @@ const PLACEHOLDER = "https://placehold.co/900x700/162235/B6C2D2?text=No+Image";
 function PackageGallery({ destination }) {
   const images = destination.gallery?.length ? destination.gallery : [destination.image];
   const [activeImage, setActiveImage] = useState(images[0]);
+  const { settings } = useSettings();
 
   return (
     <div className="editorial-image">
@@ -58,6 +62,7 @@ function PackageGallery({ destination }) {
 export default function Packages() {
   const [groupedByCategory, setGroupedByCategory] = useState([]);
   const [loading, setLoading] = useState(true);
+  const { settings } = useSettings();
 
   useEffect(() => {
     const loadPackages = async () => {
@@ -145,7 +150,7 @@ export default function Packages() {
                       <div className="editorial-meta">
                         <div className="editorial-price-block">
                           <span className="editorial-price-label">Starting from</span>
-                          <span className="editorial-price">${destination.price} <small>/ person</small></span>
+                          <span className="editorial-price">{formatPrice(destination.price, settings.currency)} <small>/ person</small></span>
                         </div>
                       </div>
 

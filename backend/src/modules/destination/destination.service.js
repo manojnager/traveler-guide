@@ -161,7 +161,8 @@ export const getDestinationBySlug = async (slug) => {
           user: {
             select: {
               firstName: true,
-              lastName: true
+              lastName: true,
+              avatar: true
             }
           }
         }

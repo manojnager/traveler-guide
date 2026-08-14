@@ -242,7 +242,7 @@
 
 .contact-faq-accordion-item.is-open .contact-faq-accordion-body {
   max-height: 200px;
-  padding: 0 20px 20px 56px;
+  padding: 0 20px 20px 20px;
 }
 
 .contact-faq-accordion-body p {

@@ -1,60 +1,106 @@
 import prisma from "../../lib/prisma.js";
-
+import { encrypt } from "../../utils/encryption.js";
 const DEFAULT_SETTINGS = [
   { key: "site_name", value: "Traveler Guide", group: "general" },
   { key: "site_logo", value: "", group: "general" },
   { key: "contact_email", value: "", group: "general" },
   { key: "contact_phone", value: "", group: "general" },
   { key: "address", value: "", group: "general" },
-
   { key: "facebook_url", value: "", group: "social" },
   { key: "instagram_url", value: "", group: "social" },
   { key: "twitter_url", value: "", group: "social" },
-
   { key: "default_meta_title", value: "", group: "seo" },
   { key: "default_meta_description", value: "", group: "seo" },
-
   { key: "default_cancellation_policy", value: "", group: "booking" },
-  { key: "currency", value: "USD", group: "booking" }
+  { key: "currency", value: "USD", group: "booking" },
+  { key: "smtp_host", value: "", group: "smtp" },
+  { key: "smtp_port", value: "587", group: "smtp" },
+  { key: "smtp_security", value: "tls", group: "smtp" },
+  { key: "smtp_username", value: "", group: "smtp" },
+  { key: "smtp_password", value: "", group: "smtp" },
+  { key: "smtp_from_name", value: "TravelerGuide", group: "smtp" },
+  { key: "smtp_from_email", value: "", group: "smtp" },
+  { key: "smtp_notify_email", value: "", group: "smtp" },
+  { key: "stripe_enabled", value: "false", group: "stripe" },
+  { key: "stripe_publishable_key", value: "", group: "stripe" },
+  { key: "stripe_secret_key", value: "", group: "stripe" }
 ];
-
 export const getAllSettings = async () => {
   const existing = await prisma.setting.findMany();
   const existingKeys = new Set(existing.map((s) => s.key));
-
-  const missingDefaults = DEFAULT_SETTINGS.filter(
-    (d) => !existingKeys.has(d.key)
-  );
-
+  const missingDefaults = DEFAULT_SETTINGS.filter((d) => !existingKeys.has(d.key));
   if (missingDefaults.length) {
     await prisma.setting.createMany({
       data: missingDefaults,
       skipDuplicates: true
     });
   }
-
   const all = await prisma.setting.findMany({
     orderBy: { key: "asc" }
   });
-
-  return all.reduce((grouped, setting) => {
-    if (!grouped[setting.group]) {
-      grouped[setting.group] = {};
+  const grouped = all.reduce((acc, setting) => {
+    if (!acc[setting.group]) {
+      acc[setting.group] = {};
     }
-    grouped[setting.group][setting.key] = setting.value;
-    return grouped;
+    acc[setting.group][setting.key] = setting.value;
+    return acc;
   }, {});
+  // Never send the encrypted password to the frontend — only a flag showing one is set
+  if (grouped.smtp) {
+    grouped.smtp.smtp_password_is_set = Boolean(grouped.smtp.smtp_password);
+    grouped.smtp.smtp_password = "";
+  }
+  // Same treatment for the Stripe secret key — never expose the encrypted value
+  if (grouped.stripe) {
+    grouped.stripe.stripe_secret_key_is_set = Boolean(grouped.stripe.stripe_secret_key);
+    grouped.stripe.stripe_secret_key = "";
+  }
+  return grouped;
+};
+
+export const getPublicSettings = async () => {
+  const all = await getAllSettings();
+
+  return {
+    site_name: all.general?.site_name || "",
+    currency: all.booking?.currency || "USD",
+    default_cancellation_policy: all.booking?.default_cancellation_policy || "",
+    contact_email: all.general?.contact_email || "",
+    contact_phone: all.general?.contact_phone || "",
+    address: all.general?.address || "",
+    facebook_url: all.social?.facebook_url || "",
+    instagram_url: all.social?.instagram_url || "",
+    twitter_url: all.social?.twitter_url || ""
+  };
 };
 
 export const updateSettings = async (payload) => {
   const entries = [];
-
   Object.entries(payload).forEach(([group, fields]) => {
     Object.entries(fields).forEach(([key, value]) => {
+      if (group === "smtp" && key === "smtp_password") {
+        // Skip overwriting the stored password if the field was left blank
+        if (!value) return;
+        entries.push({ key, value: encrypt(value), group });
+        return;
+      }
+      if (group === "smtp" && key === "smtp_password_is_set") {
+        // Frontend-only display flag, never persisted
+        return;
+      }
+      if (group === "stripe" && key === "stripe_secret_key") {
+        // Skip overwriting the stored secret key if the field was left blank
+        if (!value) return;
+        entries.push({ key, value: encrypt(value), group });
+        return;
+      }
+      if (group === "stripe" && key === "stripe_secret_key_is_set") {
+        // Frontend-only display flag, never persisted
+        return;
+      }
       entries.push({ key, value: value ?? "", group });
     });
   });
-
   await prisma.$transaction(
     entries.map((entry) =>
       prisma.setting.upsert({
@@ -64,6 +110,5 @@ export const updateSettings = async (payload) => {
       })
     )
   );
-
   return getAllSettings();
 };

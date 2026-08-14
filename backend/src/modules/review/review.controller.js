@@ -3,8 +3,11 @@ import {
   getAdminReviews,
   getReviewById,
   setReviewVisibility,
-  deleteReview
+  deleteReview,
+  getMyReviewableBookings,
+  createReview
 } from "./review.service.js";
+import { createReviewSchema } from "./review.validation.js";
 
 export const adminIndex = async (req, res, next) => {
   try {
@@ -40,6 +43,25 @@ export const destroy = async (req, res, next) => {
   try {
     await deleteReview(req.params.id);
     return successResponse(res, "Review deleted successfully.", null);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const myReviewableBookings = async (req, res, next) => {
+  try {
+    const bookings = await getMyReviewableBookings(req.user.id);
+    return successResponse(res, "Reviewable bookings fetched successfully.", bookings);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const store = async (req, res, next) => {
+  try {
+    const data = createReviewSchema.parse(req.body);
+    const review = await createReview(req.user.id, data);
+    return successResponse(res, "Review submitted successfully.", review, 201);
   } catch (error) {
     next(error);
   }

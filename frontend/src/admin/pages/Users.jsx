@@ -12,6 +12,8 @@ import { useAuth } from "../context/AuthContext";
 import { getAdminUsers, createUser, updateUser, deleteUser } from "../services/userService";
 import { getAllRoles } from "../services/roleService";
 
+import { getImageUrl } from "../../utils/image";
+
 const STATUS_FILTER_OPTIONS = [
   { value: "", label: "All Statuses" },
   { value: "ACTIVE", label: "Active" },
@@ -139,11 +141,33 @@ export default function Users() {
     ...roles.map((r) => ({ value: String(r.id), label: r.name }))
   ];
 
+  const AVATAR_COLORS = ["C8A96A", "9A7A3D", "7A612F", "5F4A25", "3A3023", "292722", "40372A", "51432E"];
+
+  const getFallbackAvatarUrl = (user) => {
+    const name = `${user.firstName || ""} ${user.lastName || ""}`.trim() || "User";
+    const colorIndex = user.id % AVATAR_COLORS.length;
+    const background = AVATAR_COLORS[colorIndex];
+    return `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=${background}&color=fff&size=64&bold=true`;
+  };
+
   const columns = [
     {
       name: "Name",
+      sortable: true,
       selector: (row) => `${row.firstName} ${row.lastName}`,
-      sortable: true
+      cell: (row) => (
+        <div className="d-flex align-items-center gap-2 py-2">
+          <span
+            className="avatar avatar-sm rounded-circle adminuserimages"
+            style={{
+              backgroundImage: `url(${row.avatar ? getImageUrl(row.avatar) : getFallbackAvatarUrl(row)})`
+            }}
+          />
+          <div className="fw-semibold">
+            {row.firstName} {row.lastName}
+          </div>
+        </div>
+      )
     },
     { name: "Email", selector: (row) => row.email },
     { name: "Phone", selector: (row) => row.phone || "-" },

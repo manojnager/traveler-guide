@@ -1,4 +1,5 @@
-import { FaStar } from "react-icons/fa";
+import { FaStar, FaQuoteLeft } from "react-icons/fa";
+import { getImageUrl } from "../../utils/image";
 import "./Reviews.css";
 
 function Reviews({ destination }) {
@@ -14,27 +15,31 @@ function Reviews({ destination }) {
   return (
     <section className="reviews-section">
 
-      <h2>Traveler Reviews</h2>
+      <div className="reviews-top">
 
-      <div className="reviews-summary">
+        <h2>Traveler Reviews</h2>
 
-        <div className="reviews-score">
-          {destination.rating}
-        </div>
+        <div className="reviews-summary">
 
-        <div>
-
-          <div className="reviews-stars">
-            <FaStar />
-            <FaStar />
-            <FaStar />
-            <FaStar />
-            <FaStar />
+          <div className="reviews-score">
+            {destination.rating}
           </div>
 
-          <p>
-            Based on {destination.reviews.length} verified reviews
-          </p>
+          <div>
+
+            <div className="reviews-stars">
+              <FaStar />
+              <FaStar />
+              <FaStar />
+              <FaStar />
+              <FaStar />
+            </div>
+
+            <p>
+              Based on {destination.reviews.length} verified reviews
+            </p>
+
+          </div>
 
         </div>
 
@@ -43,24 +48,43 @@ function Reviews({ destination }) {
       <div className="reviews-grid">
 
         {destination.reviews.map((review) => (
+ 
           <article
             className="review-card"
             key={review.id}
           >
 
-            <div className="review-header">
+            <FaQuoteLeft className="review-quote-icon" />
 
-              <div>
+            <p className="review-text">{review.review}</p>
+
+            <div className="review-footer">
+
+              {review.avatar ? (
+                <img
+                  className="review-avatar"
+                  src={getImageUrl(review.avatar)}
+                  alt={review.name}
+                />
+              ) : (
+                <div className="review-avatar review-avatar-fallback">
+                  {review.name?.[0]}
+                </div>
+              )}
+
+              <div className="review-footer-info">
 
                 <h3>{review.name}</h3>
 
+                <div className="review-card-stars">
+                  {Array.from({ length: review.rating }).map((_, i) => (
+                    <FaStar key={i} />
+                  ))}
+                </div>
+
               </div>
 
-              <strong><div class="reviews-score">{review.rating}</div></strong>
-
             </div>
-
-            <p>{review.review}</p>
 
           </article>
         ))}

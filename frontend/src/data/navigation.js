@@ -14,6 +14,10 @@ const navigation = [
     path: ROUTES.PACKAGES
   },
   {
+    label: "Journal",
+    path: ROUTES.TRAVEL_JOURNAL
+  },
+  {
     label: "About",
     path: ROUTES.ABOUT
   },

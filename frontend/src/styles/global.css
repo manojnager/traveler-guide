@@ -172,3 +172,9 @@ grid-template-columns:1fr;
     height: 45px;
     background-position: top;
 }
+span.avatar.avatar-sm.rounded-circle.adminuserimages {
+    height: 52px;
+}
+.modalouterusers .modal-dialog {
+    min-width: 700px;
+}

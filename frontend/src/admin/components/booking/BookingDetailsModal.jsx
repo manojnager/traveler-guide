@@ -3,10 +3,12 @@ import { format } from "date-fns";
 
 import { getImageUrl } from "../../utils/image";
 import BookingStatusBadge from "./BookingStatusBadge";
+import { useSettings } from "../../../context/SettingsContext";
+import { formatPrice } from "../../../utils/currency";
 
 export default function BookingDetailsModal({ show, onClose, booking }) {
   if (!booking) return null;
-
+  const { settings } = useSettings();
   return (
     <Modal show={show} onHide={onClose} centered size="lg">
       <Modal.Header closeButton>
@@ -62,7 +64,7 @@ export default function BookingDetailsModal({ show, onClose, booking }) {
 
           <div className="col-md-6">
             <div className="text-secondary small">Total Amount</div>
-            <div className="fw-medium">${Number(booking.totalAmount).toFixed(2)}</div>
+            <div className="fw-medium">{formatPrice(booking.totalAmount, settings.currency)}</div>
           </div>
 
           <div className="col-md-6">

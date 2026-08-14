@@ -1,0 +1,4 @@
+-- AlterTable
+ALTER TABLE `payment` ADD COLUMN `failureReason` VARCHAR(500) NULL,
+    ADD COLUMN `stripePaymentIntentId` VARCHAR(255) NULL,
+    ADD COLUMN `updatedAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3);

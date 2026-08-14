@@ -128,3 +128,9 @@ transition:.3s;
 border-color:#c8a96a;
 color:#c8a96a;
 }
+@media (max-width: 992px) {
+  .booking-card {
+    position: static;
+    top: auto;
+  }
+}

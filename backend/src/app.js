@@ -8,11 +8,22 @@ import notFound from "./middlewares/notFound.js";
 import errorHandler from "./middlewares/errorHandler.js";
 import authRoutes from "./modules/auth/auth.routes.js";
 import destinationRoutes from "./modules/destination/destination.routes.js";
+import contactRoutes from "./modules/contact/contact.routes.js";
+
 import bookingRoutes from "./modules/booking/booking.routes.js";
 
 import uploadRoutes from "./modules/upload/upload.routes.js";
 
 import adminRoutes from "./modules/admin/admin.routes.js";
+import blockedDateRoutes from "./modules/blockedDate/blockedDate.routes.js";
+import userRoutes from "./modules/user/user.routes.js";
+
+import paymentRoutes from "./modules/payment/payment.routes.js";
+import settingsRoutes from "./modules/settings/settings.routes.js";
+import reviewRoutes from "./modules/review/review.routes.js";
+
+import blogRoutes from "./modules/blog/blog.routes.js";
+import blogPostRoutes from "./routes/blogPostRoutes.js";
 
 const app = express();
 
@@ -53,10 +64,20 @@ app.use("/api/auth", authRoutes);
 app.use("/api/upload", uploadRoutes);
 
 app.use("/api/destinations", destinationRoutes);
+
+app.use("/api/contact", contactRoutes);
+
 app.use("/api/bookings", bookingRoutes);
 
 app.use("/api/admin", adminRoutes);
+app.use("/api/destinations", blockedDateRoutes);
+app.use("/api/users", userRoutes);
+app.use("/api/payments", paymentRoutes);
+app.use("/api/settings", settingsRoutes);
+app.use("/api/reviews", reviewRoutes);
 
+app.use("/api/blog", blogRoutes);
+app.use("/api/blog-posts", blogPostRoutes);
 
 app.get("/api/health", (req, res) => {
   res.json({

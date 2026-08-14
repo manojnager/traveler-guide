@@ -4,7 +4,8 @@ import {
   getBookingById,
   updateBookingStatus,
   deleteBooking,
-  createPublicBooking
+  createPublicBooking,
+  getMyBookings
 } from "./booking.service.js";
 import {
   updateBookingStatusSchema,
@@ -51,8 +52,17 @@ export const destroy = async (req, res, next) => {
 export const store = async (req, res, next) => {
   try {
     const data = createPublicBookingSchema.parse(req.body);
-    const result = await createPublicBooking(data);
+    const result = await createPublicBooking(data, req.user);
     return successResponse(res, "Booking created successfully.", result, 201);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const myBookings = async (req, res, next) => {
+  try {
+    const bookings = await getMyBookings(req.user.id, req.query);
+    return successResponse(res, "Your bookings fetched successfully.", bookings);
   } catch (error) {
     next(error);
   }

@@ -11,12 +11,18 @@ import "./styles/global.css";
 
 import App from "./App";
 import ScrollToTop from "./ScrollToTop";
+import { AuthProvider } from "./context/AuthContext";
+import { SettingsProvider } from "./context/SettingsContext";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <BrowserRouter>
       <ScrollToTop />
-      <App />
+      <SettingsProvider>
+        <AuthProvider>
+          <App />
+        </AuthProvider>
+      </SettingsProvider>
       <Toaster position="top-right" />
     </BrowserRouter>
   </React.StrictMode>

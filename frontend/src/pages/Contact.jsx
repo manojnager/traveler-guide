@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { FaMapMarkerAlt, FaPhoneAlt, FaEnvelope, FaClock, FaChevronDown } from "react-icons/fa";
 import toast from "react-hot-toast";
+import { submitContactMessage } from "../services/contactService";
 
 import "./Contact.css";
 
@@ -56,7 +57,7 @@ function ContactUs() {
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!form.name || !form.email || !form.message) {
@@ -66,11 +67,16 @@ function ContactUs() {
 
     setSubmitting(true);
 
-    setTimeout(() => {
+    try {
+      await submitContactMessage(form);
       toast.success("Thanks for reaching out! We'll get back to you within 24 hours.");
       setForm(initialForm);
+    } catch (error) {
+      const message = error.response?.data?.message || "Failed to send message. Please try again.";
+      toast.error(message);
+    } finally {
       setSubmitting(false);
-    }, 700);
+    }
   };
 
   return (

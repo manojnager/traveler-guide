@@ -1,8 +1,12 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Modal, Button } from "react-bootstrap";
 import { useForm, Controller } from "react-hook-form";
 import Select from "react-select";
 import toast from "react-hot-toast";
+import { IconCamera, IconTrash } from "@tabler/icons-react";
+
+import { uploadUserAvatar } from "../../services/avatarUploadService";
+import { getImageUrl } from "../../../utils/image";
 
 const STATUS_OPTIONS = [
   { value: "ACTIVE", label: "Active" },
@@ -11,6 +15,9 @@ const STATUS_OPTIONS = [
 
 export default function UserFormModal({ show, onClose, onSaved, user, saveFn, roles, isSelf }) {
   const [saving, setSaving] = useState(false);
+  const [uploadingAvatar, setUploadingAvatar] = useState(false);
+  const [avatarPath, setAvatarPath] = useState("");
+  const fileInputRef = useRef(null);
 
   const {
     register,
@@ -41,10 +48,34 @@ export default function UserFormModal({ show, onClose, onSaved, user, saveFn, ro
         roleId: user?.roleId ? String(user.roleId) : "",
         status: user?.status || "ACTIVE"
       });
+      setAvatarPath(user?.avatar || "");
     }
   }, [show, user, reset]);
 
   const roleOptions = roles.map((r) => ({ value: String(r.id), label: r.name }));
+
+  const handleAvatarSelect = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setUploadingAvatar(true);
+
+    try {
+      const result = await uploadUserAvatar(file);
+      setAvatarPath(result.path);
+      toast.success("Photo uploaded.");
+    } catch (error) {
+      const message = error.response?.data?.message || "Failed to upload photo.";
+      toast.error(message);
+    } finally {
+      setUploadingAvatar(false);
+      if (fileInputRef.current) fileInputRef.current.value = "";
+    }
+  };
+
+  const handleRemoveAvatar = () => {
+    setAvatarPath("");
+  };
 
   const onSubmit = async (data) => {
     setSaving(true);
@@ -56,7 +87,8 @@ export default function UserFormModal({ show, onClose, onSaved, user, saveFn, ro
         email: data.email,
         phone: data.phone,
         roleId: Number(data.roleId),
-        status: data.status
+        status: data.status,
+        avatar: avatarPath
       };
 
       if (data.password) {
@@ -79,13 +111,54 @@ export default function UserFormModal({ show, onClose, onSaved, user, saveFn, ro
   };
 
   return (
-    <Modal show={show} onHide={onClose} centered>
+    <Modal className="modalouterusers" show={show} onHide={onClose} centered>
       <Modal.Header closeButton>
         <Modal.Title>{user ? "Edit User" : "Add User"}</Modal.Title>
       </Modal.Header>
 
       <form onSubmit={handleSubmit(onSubmit)}>
         <Modal.Body>
+          <div className="d-flex align-items-center gap-3 mb-4">
+            <div
+              className="avatar avatar-lg avtarinpopupimage "
+              style={{
+                backgroundImage: avatarPath ? `url(${getImageUrl(avatarPath)})` : undefined,
+                backgroundColor: avatarPath ? undefined : "#e6e7e9"
+              }}
+            />
+
+            <div>
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/*"
+                className="d-none"
+                onChange={handleAvatarSelect}
+              />
+
+              <button
+                type="button"
+                className="btn btn-outline-primary btn-sm d-flex align-items-center gap-1"
+                onClick={() => fileInputRef.current?.click()}
+                disabled={uploadingAvatar}
+              >
+                <IconCamera size={16} />
+                {uploadingAvatar ? "Uploading..." : avatarPath ? "Replace Photo" : "Upload Photo"}
+              </button>
+
+              {avatarPath && (
+                <button
+                  type="button"
+                  className="btn btn-outline-danger btn-sm d-flex align-items-center gap-1 mt-2"
+                  onClick={handleRemoveAvatar}
+                >
+                  <IconTrash size={16} />
+                  Remove
+                </button>
+              )}
+            </div>
+          </div>
+
           <div className="row g-3">
             <div className="col-md-6">
               <label className="form-label">First Name</label>
@@ -107,7 +180,7 @@ export default function UserFormModal({ show, onClose, onSaved, user, saveFn, ro
               {errors.lastName && <div className="invalid-feedback">{errors.lastName.message}</div>}
             </div>
 
-            <div className="col-md-12">
+            <div className="col-md-6">
               <label className="form-label">Email</label>
               <input
                 type="email"
@@ -117,7 +190,7 @@ export default function UserFormModal({ show, onClose, onSaved, user, saveFn, ro
               {errors.email && <div className="invalid-feedback">{errors.email.message}</div>}
             </div>
 
-            <div className="col-md-12">
+            <div className="col-md-6">
               <label className="form-label">
                 Password {user && <span className="text-secondary">(leave blank to keep current)</span>}
               </label>

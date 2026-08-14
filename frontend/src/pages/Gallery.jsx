@@ -23,7 +23,7 @@ function Gallery() {
         const allImages = [];
         mapped.forEach((destination) => {
           const photos = destination.gallery?.length ? destination.gallery : [destination.image];
-          const limitedPhotos = photos.slice(0, 3);
+          const limitedPhotos = photos.slice(0, 20);
 
           limitedPhotos.forEach((img) => {
             if (img) {
@@ -114,7 +114,7 @@ function Gallery() {
 
           {loading && (
             <div className="gallery-masonry">
-              {Array.from({ length: 12 }).map((_, i) => (
+              {Array.from({ length: Math.floor(Math.random() * 181) + 20 }).map((_, i) => (
                 <div key={i} className="gallery-skeleton" style={{ height: `${180 + (i % 3) * 60}px` }} />
               ))}
             </div>

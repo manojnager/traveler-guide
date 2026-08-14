@@ -10,6 +10,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@stripe/react-stripe-js": "^6.8.0",
+    "@stripe/stripe-js": "^9.13.0",
     "@tabler/core": "^1.4.0",
     "@tabler/icons-react": "^3.44.0",
     "axios": "^1.18.1",
@@ -28,6 +30,7 @@
     "react-loading-skeleton": "^3.5.0",
     "react-paginate": "^8.3.0",
     "react-perfect-scrollbar": "^1.5.8",
+    "react-quill-new": "^3.8.3",
     "react-router-dom": "^7.18.1",
     "react-select": "^5.10.2",
     "react-spinners": "^0.17.0",
