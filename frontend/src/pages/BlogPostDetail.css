@@ -119,6 +119,7 @@ section.section.bpd-content-section {
 
 .bpd-content p {
   margin-bottom: 0px;
+  position: relative;
 }
 
 .bpd-content ul,
