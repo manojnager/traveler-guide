@@ -1,6 +1,6 @@
 .latest-journal {
   padding: 140px 0;
-  background: #08111f;
+  background: #1b212a;
 }
 
 .latest-journal-grid {
@@ -101,6 +101,9 @@
 
 .latest-journal-link:hover {
   gap: 14px;
+  text-decoration: none;
+    color: #c58400;
+    font-weight: 500;
 }
 
 @media (max-width: 900px) {

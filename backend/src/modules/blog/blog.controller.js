@@ -7,7 +7,8 @@ import {
   deleteBlogPost,
   getPublicBlogPosts,
   getPublicBlogCategories,
-  getPublicBlogPostBySlug
+  getPublicBlogPostBySlug,
+  getLatestBlogPosts
 } from "./blog.service.js";
 
 import { createBlogPostSchema, updateBlogPostSchema } from "./blog.validation.js";

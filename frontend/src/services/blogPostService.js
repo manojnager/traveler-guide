@@ -17,5 +17,6 @@ export const getBlogPostBySlug = async (slug) => {
 
 export const getLatestBlogPosts = async (limit = 3) => {
   const response = await api.get("/blog/latest", { params: { limit } });
+  console.log('posts LETEST CHECK ', response);
   return response.data.data;
-};
+}; 
